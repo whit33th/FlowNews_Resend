@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-export default function Logo() {
+export const Logo = () => {
   const SVGLogo = (
     <svg
       viewBox="0 0 56 56"
@@ -73,4 +73,4 @@ export default function Logo() {
       </div>
     </Link>
   );
-}
+}; 

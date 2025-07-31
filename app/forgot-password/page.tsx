@@ -1,14 +1,12 @@
 "use client";
 
 import { useQuery } from "convex-helpers/react/cache";
-import { Authenticated, Unauthenticated } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Mail } from "lucide-react";
 import Link from "next/link";
-import { api } from "../../convex/_generated/api";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { api } from "../../convex/_generated/api";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();

@@ -142,102 +142,29 @@ export const getAllTags = query({
   },
 });
 
-// Seed some example news data
-export const seedNews = mutation({
-  args: {},
-  handler: async (ctx) => {
-    const sampleNews = [
-      {
-        title: "Revolutionary AI Breakthrough in Healthcare",
-        content:
-          "Scientists have developed a new AI system that can diagnose diseases with 99% accuracy. This breakthrough could transform medical diagnosis and treatment worldwide.",
-        summary: "New AI system achieves 99% accuracy in disease diagnosis",
-        tags: ["Tech", "Healthcare", "AI"],
-        mentions: ["@TechNews", "@HealthcareTech"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 2, // 2 hours ago
-        source: "TechDaily",
-        url: "https://example.com/ai-healthcare",
-        isPremium: false,
-      },
-      {
-        title: "Climate Change Summit Reaches Historic Agreement",
-        content:
-          "World leaders have agreed on unprecedented climate action measures at the global summit. The agreement includes binding emissions targets and substantial funding for renewable energy.",
-        summary:
-          "Historic climate agreement reached with binding emissions targets",
-        tags: ["Environment", "Politics", "Climate"],
-        mentions: ["@ClimateNews", "@WorldLeaders"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 4, // 4 hours ago
-        source: "Global News",
-        url: "https://example.com/climate-summit",
-        isPremium: false,
-      },
-      {
-        title: "Stock Market Hits Record High Amid Tech Rally",
-        content:
-          "Major stock indices reached all-time highs today as technology stocks surged. Investors are optimistic about AI and renewable energy sectors driving future growth.",
-        summary: "Stock market reaches record high on tech rally",
-        tags: ["Finance", "Tech", "Markets"],
-        mentions: ["@MarketWatch", "@TechStocks"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 6, // 6 hours ago
-        source: "Financial Times",
-        url: "https://example.com/market-high",
-        isPremium: true,
-      },
-      {
-        title: "New Music Festival Announces Star-Studded Lineup",
-        content:
-          "The annual SoundWave festival has revealed its biggest lineup yet, featuring top artists from around the world. Tickets are expected to sell out within hours.",
-        summary: "SoundWave festival announces major artist lineup",
-        tags: ["Music", "Events", "Entertainment"],
-        mentions: ["@SoundWave", "@MusicNews"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 8, // 8 hours ago
-        source: "Music Weekly",
-        url: "https://example.com/music-festival",
-        isPremium: false,
-      },
-      {
-        title: "Rare Wildlife Species Discovered in Amazon Rainforest",
-        content:
-          "Researchers have discovered three new species of birds in the Amazon rainforest. This discovery highlights the importance of conservation efforts in protecting biodiversity.",
-        summary: "Three new bird species discovered in Amazon",
-        tags: ["Nature", "Science", "Conservation"],
-        mentions: ["@NatureNews", "@AmazonWatch"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 12, // 12 hours ago
-        source: "Nature Today",
-        url: "https://example.com/amazon-discovery",
-        isPremium: true,
-      },
-      {
-        title: "Exclusive: Inside the Secret Space Mission",
-        content:
-          "Our investigative team has uncovered details about a classified space mission that could revolutionize space travel. This exclusive report reveals the technology behind the mission.",
-        summary: "Exclusive report on classified space mission technology",
-        tags: ["Space", "Tech", "Exclusive"],
-        mentions: ["@SpaceNews", "@TechExclusive"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 1, // 1 hour ago
-        source: "Space Weekly",
-        url: "https://example.com/space-mission",
-        isPremium: true,
-      },
-      {
-        title: "Breaking: Major Political Scandal Uncovered",
-        content:
-          "A major political scandal has been uncovered involving high-ranking officials. This developing story has significant implications for the upcoming elections.",
-        summary: "Major political scandal involving high-ranking officials",
-        tags: ["Politics", "Breaking", "Scandal"],
-        mentions: ["@PoliticalNews", "@BreakingNews"],
-        publishedAt: Date.now() - 1000 * 60 * 60 * 3, // 3 hours ago
-        source: "Political Daily",
-        url: "https://example.com/political-scandal",
-        isPremium: true,
-      },
-    ];
-
-    for (const news of sampleNews) {
-      await ctx.db.insert("news", news);
+// Add multiple blog posts from array
+export const insertMultipleBlogPosts = mutation({
+  args: {
+    blogPosts: v.array(
+      v.object({
+        title: v.string(),
+        content: v.string(),
+        summary: v.optional(v.string()),
+        tags: v.array(v.string()),
+        mentions: v.array(v.string()),
+        publishedAt: v.number(),
+        source: v.optional(v.string()),
+        url: v.optional(v.string()),
+        isPremium: v.optional(v.boolean()),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    const insertedIds = [];
+    for (const blogPost of args.blogPosts) {
+      const id = await ctx.db.insert("news", blogPost);
+      insertedIds.push(id);
     }
-
-    return "News seeded successfully";
+    return { insertedIds, count: insertedIds.length };
   },
 });
