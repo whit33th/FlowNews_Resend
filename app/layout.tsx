@@ -22,12 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${yrsa.variable} antialiased bg-[#FFFFFF]`}>
+      <body
+        className={`${yrsa.variable} antialiased  bg-[#FFFFFF] h-dvh flex flex-col`}
+      >
         <Convex>
-          <div className="flex flex-col h-screen">
-            <Header />
-            <main className="flex-1 ">{children}</main>
-          </div>
+          <Header />
+          <main className="flex-1 ">{children}</main>
         </Convex>
       </body>
     </html>

@@ -24,7 +24,7 @@ export const ArticleImage = ({
   const shouldBlur = !isAuthenticated && isPremium;
 
   return (
-    <div className="relative">
+    <>
       <Image
         src={src}
         alt={alt}
@@ -39,6 +39,6 @@ export const ArticleImage = ({
           <span className="text-white text-xs font-bold">{premiumLabel}</span>
         </div>
       )}
-    </div>
+    </>
   );
 };
