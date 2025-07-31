@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NewsFlow - Personalized News Feed
+
+A modern news application built with Next.js 15, Convex, and Tailwind CSS that provides personalized news feeds based on user interests.
+
+## Features
+
+- 🔐 Authentication with Convex Auth
+- 📰 Personalized news feed based on user interests
+- 🔍 Search and filter functionality
+- 👤 User profile management
+- 📧 Email digest subscriptions
+- 🎨 Modern UI with Tailwind CSS
+- ⚡ Real-time updates with Convex
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 with App Router
+- **Backend**: Convex (Database + Backend)
+- **Authentication**: Convex Auth
+- **Styling**: Tailwind CSS
+- **Email**: Resend
+- **Language**: TypeScript
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm
+- Convex account
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd newsletters-convex-resend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory:
 
-## Learn More
+```env
+NEXT_PUBLIC_CONVEX_URL=your_convex_url_here
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Set up Convex:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx convex dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. Start the development server:
 
-## Deploy on Vercel
+```bash
+pnpm dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+```
+├── app/                    # Next.js App Router
+│   ├── layout.tsx         # Root layout with providers
+│   ├── page.tsx           # Main application page
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── Navigation.tsx     # Navigation component
+│   ├── NewsCard.tsx       # News article card
+│   ├── NewsFeed.tsx       # News feed component
+│   ├── OnboardingFlow.tsx # User onboarding
+│   ├── ProfileSettings.tsx # User profile settings
+│   └── SearchAndFilter.tsx # Search and filter
+├── convex/               # Convex backend
+│   ├── auth.config.ts    # Authentication config
+│   ├── schema.ts         # Database schema
+│   ├── news.ts           # News-related functions
+│   └── subscribers.ts    # Subscriber management
+├── lib/                  # Utility functions
+│   └── utils.ts          # Common utilities
+├── public/               # Static assets
+└── SignInForm.tsx        # Authentication form
+```
+
+## Key Features
+
+### Authentication
+
+- Email/password authentication
+- Anonymous sign-in option
+- Secure session management
+
+### News Feed
+
+- Personalized content based on user interests
+- Real-time updates
+- Search and filtering capabilities
+- Infinite scroll pagination
+
+### User Management
+
+- Topic subscription management
+- Email digest preferences
+- Profile settings
+
+## Development
+
+### Running in Development Mode
+
+```bash
+pnpm dev
+```
+
+### Building for Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+### Linting
+
+```bash
+pnpm lint
+```
+
+## Deployment
+
+The application can be deployed to Vercel with the following steps:
+
+1. Connect your repository to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.

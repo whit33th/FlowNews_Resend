@@ -1,0 +1,7 @@
+{
+  "providers": {
+    "convex": {
+      "url": "https://your-convex-url.convex.cloud"
+    }
+  }
+}
