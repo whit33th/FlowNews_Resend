@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
+import { getContentForArticle } from "../../../helpers/loremIpsum";
 
 export default function NewsArticlePage() {
   const params = useParams();
@@ -13,6 +14,11 @@ export default function NewsArticlePage() {
 
   const article = useQuery(api.news.getNewsById, { id: newsId as any });
   const loggedInUser = useQuery(api.auth.loggedInUser);
+  const subscriber = useQuery(api.subscribers.getSubscriber);
+  const subscriberByEmail = useQuery(
+    api.subscribers.getSubscriberByEmail,
+    loggedInUser?.email ? { email: loggedInUser.email } : "skip"
+  );
 
   if (article === undefined) {
     return (
@@ -44,10 +50,24 @@ export default function NewsArticlePage() {
     );
   }
 
-  // Check if article is premium and user is not authenticated
+  // Check if article is premium and user is not subscribed
   const isPremiumArticle = article.isPremium;
-  const isAuthenticated = loggedInUser !== null;
-  const showPremiumBlur = isPremiumArticle && !isAuthenticated;
+  const isSubscribed = !!(subscriber || subscriberByEmail);
+  const showPremiumBlur = isPremiumArticle && !isSubscribed;
+
+  const displayContent = getContentForArticle(
+    article.text,
+    isSubscribed,
+    isPremiumArticle || false
+  );
+
+  const displaySummary = article.summary
+    ? getContentForArticle(
+        article.summary,
+        isSubscribed,
+        isPremiumArticle || false
+      )
+    : null;
 
   return (
     <div className="max-w-4xl mx-auto p-6 lg:p-8">
@@ -64,11 +84,7 @@ export default function NewsArticlePage() {
 
       {/* Article Header */}
       <div className="mb-8">
-        <h1
-          className={`text-3xl lg:text-4xl font-bold text-black mb-4 leading-tight ${
-            showPremiumBlur ? "blur-sm" : ""
-          }`}
-        >
+        <h1 className="text-3xl lg:text-4xl font-bold text-black mb-4 leading-tight">
           {article.title}
         </h1>
 
@@ -106,7 +122,7 @@ export default function NewsArticlePage() {
               <span className="text-red-600 font-bold">PREMIUM CONTENT</span>
             </div>
             <p className="text-red-700 mb-3">
-              This is premium content. Please sign in to read the full article.
+              This is premium text. Please sign in to read the full article.
             </p>
             <Link
               href="/signin"
@@ -131,9 +147,7 @@ export default function NewsArticlePage() {
           />
           {showPremiumBlur && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <span className="text-white text-2xl font-bold">
-                PREMIUM CONTENT
-              </span>
+              <span className="text-white text-2xl font-bold">PREMIUM</span>
             </div>
           )}
         </div>
@@ -146,19 +160,17 @@ export default function NewsArticlePage() {
             showPremiumBlur ? "blur-sm" : ""
           }`}
         >
-          {article.content}
+          {displayContent}
         </div>
 
-        {article.summary && (
+        {displaySummary && (
           <div
             className={`bg-gray-50 p-6 rounded-lg mb-8 ${
               showPremiumBlur ? "blur-sm" : ""
             }`}
           >
             <h3 className="text-xl font-bold text-black mb-3">Summary</h3>
-            <p className="text-neutral-700 leading-relaxed">
-              {article.summary}
-            </p>
+            <p className="text-neutral-700 leading-relaxed">{displaySummary}</p>
           </div>
         )}
 

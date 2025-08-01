@@ -17,6 +17,19 @@ export const getSubscriber = query({
   },
 });
 
+export const getSubscriberByEmail = query({
+  args: {},
+  handler: async (ctx) => {
+    const loggedInUser = await getAuthUserId(ctx);
+    if (!loggedInUser) return null;
+    const subscriber = await ctx.db
+      .query("subscribers")
+      .withIndex("by_user", (q) => q.eq("userId", loggedInUser))
+      .unique();
+    return subscriber;
+  },
+});
+
 export const createSubscriber = mutation({
   args: {
     email: v.string(),
@@ -43,7 +56,6 @@ export const createSubscriber = mutation({
       topics: args.topics,
       hashtags: [],
       mentions: [],
-      isActive: true,
     });
   },
 });
@@ -229,7 +241,6 @@ export const subscribeToNewsletter = mutation({
       topics: [],
       hashtags: [],
       mentions: [],
-      isActive: true,
       isNewsletterOnly: true,
     });
   },

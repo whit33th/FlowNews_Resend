@@ -34,10 +34,10 @@ export const NewsSlider = memo(() => {
       className="latest-news-swiper"
     >
       {latestNews.news.map((news) => (
-        <SwiperSlide key={news._id} className="!w-auto">
+        <SwiperSlide key={news._id} className="!w-auto py-2">
           <Link
             href={`/news/${news._id}`}
-            className="text-xs lg:text-sm font-semibold text-black hover:text-neutral-600 transition-colors whitespace-nowrap"
+            className="text-xs lg:text-sm font-semibold  text-black hover:text-neutral-600 transition-colors  whitespace-nowrap"
           >
             {news.title.length > 50
               ? news.title.substring(0, 50) + "..."
@@ -49,4 +49,4 @@ export const NewsSlider = memo(() => {
   );
 });
 
-NewsSlider.displayName = "NewsSlider"; 
+NewsSlider.displayName = "NewsSlider";

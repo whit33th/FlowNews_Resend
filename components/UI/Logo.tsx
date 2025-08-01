@@ -39,7 +39,7 @@ export const Logo = () => {
         <rect x="8" y="12" width="8" height="1" fill="#6b7280" />
         <rect x="8" y="14" width="10" height="1" fill="#6b7280" />
 
-        {/* Article content */}
+        {/* Article text */}
         <rect x="8" y="18" width="14" height="1" fill="#9ca3af" />
         <rect x="8" y="20" width="12" height="1" fill="#9ca3af" />
         <rect x="8" y="22" width="13" height="1" fill="#9ca3af" />
@@ -73,4 +73,4 @@ export const Logo = () => {
       </div>
     </Link>
   );
-}; 
+};

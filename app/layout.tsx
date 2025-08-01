@@ -23,11 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${yrsa.variable} antialiased  bg-[#FFFFFF] h-dvh flex flex-col`}
+        className={`${yrsa.variable} antialiased  bg-[#FFFFFF] h-dvh flex flex-col `}
       >
         <Convex>
           <Header />
-          <main className="flex-1 ">{children}</main>
+          <main className="flex-1  ">{children}</main>
         </Convex>
       </body>
     </html>

@@ -108,7 +108,7 @@ export default function SignUpPage() {
               <ul className="space-y-2 text-base lg:text-lg text-neutral-600">
                 <li>• Personalized news feed based on your interests</li>
                 <li>• Daily digest delivered to your inbox</li>
-                <li>• Access to premium articles and exclusive content</li>
+                <li>• Access to premium articles and exclusive text</li>
                 <li>• Join discussions with fellow readers</li>
               </ul>
             </div>
@@ -120,7 +120,7 @@ export default function SignUpPage() {
               <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
                 Get breaking news, in-depth analysis, and stories that matter to
                 you. Our AI-powered system learns your preferences to deliver
-                the most relevant content.
+                the most relevant text.
               </p>
             </div>
           </div>

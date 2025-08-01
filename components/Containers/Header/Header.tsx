@@ -33,7 +33,7 @@ export default function Header() {
 
         {/* Latest News Slider */}
         <div className="border-y-2 border-gray-300 py-0.5">
-          <div className="bg-pink-200 py-2 px-2 lg:px-0">
+          <div className="bg-pink-200  px-2 lg:px-0">
             <NewsSlider />
           </div>
         </div>

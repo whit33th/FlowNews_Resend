@@ -1,6 +1,33 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import schema from "./schema";
+import { paginationOptsValidator } from "convex/server";
+
+export const getAllNewsPaginated = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("news")
+      .order("desc")
+      .paginate(args.paginationOpts);
+  },
+});
+export const getMatchedNews = query({
+  args: { paginationOpts: paginationOptsValidator },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return { news: [], hasMore: false };
+    }
+    const subscriber = ctx.db
+      .query("subscribers")
+      .withIndex("by_user", (q) => q.eq("userId", userId));
+    return;
+  },
+});
 
 export const getNewsFeed = query({
   args: {
@@ -32,9 +59,7 @@ export const getNewsFeed = query({
     if (args.search) {
       const searchResults = await ctx.db
         .query("news")
-        .withSearchIndex("search_content", (q) =>
-          q.search("content", args.search!)
-        )
+        .withSearchIndex("search_text", (q) => q.search("text", args.search!))
         .take(limit);
       return { news: searchResults, hasMore: false };
     }
@@ -42,7 +67,7 @@ export const getNewsFeed = query({
     if (args.filterTags && args.filterTags.length > 0) {
       const allNews = await newsQuery.collect();
       const filtered = allNews.filter((news) =>
-        args.filterTags!.some((tag) => news.tags.includes(tag))
+        args.filterTags!.some((tag) => news.tags.includes(tag as any))
       );
       return {
         news: filtered.slice(0, limit),
@@ -84,7 +109,7 @@ export const getNewsFeed = query({
 
       // Date decay (newer is better)
       const daysSincePublished =
-        (Date.now() - news.publishedAt) / (1000 * 60 * 60 * 24);
+        (Date.now() - news._creationTime) / (1000 * 60 * 60 * 24);
       const dateScore = Math.max(0, 10 - daysSincePublished);
       score += dateScore;
 
@@ -142,22 +167,9 @@ export const getAllTags = query({
   },
 });
 
-// Add multiple blog posts from array
 export const insertMultipleBlogPosts = mutation({
   args: {
-    blogPosts: v.array(
-      v.object({
-        title: v.string(),
-        content: v.string(),
-        summary: v.optional(v.string()),
-        tags: v.array(v.string()),
-        mentions: v.array(v.string()),
-        publishedAt: v.number(),
-        source: v.optional(v.string()),
-        url: v.optional(v.string()),
-        isPremium: v.optional(v.boolean()),
-      })
-    ),
+    blogPosts: v.array(schema.tables.news.validator),
   },
   handler: async (ctx, args) => {
     const insertedIds = [];
