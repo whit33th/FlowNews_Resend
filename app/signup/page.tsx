@@ -66,9 +66,9 @@ export default function SignUpPage() {
 
       await signIn("password", formDataObj);
       toast.success("Account created successfully!");
-    } catch (error: any) {
+    } catch (error) {
       let toastTitle = "Failed to create account";
-      if (error.message.includes("already exists")) {
+      if (error instanceof Error && error.message.includes("already exists")) {
         toastTitle = "Account already exists. Please sign in instead.";
       }
       toast.error(toastTitle);

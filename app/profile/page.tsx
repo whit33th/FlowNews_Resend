@@ -3,30 +3,29 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex-helpers/react/cache";
 import { useMutation } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
 import {
-  User,
-  Settings,
   ArrowLeft,
-  Plus,
-  X,
   BookOpen,
   Calendar,
-  Mail,
   Edit3,
+  Mail,
+  Plus,
   Save,
+  Settings,
+  X,
 } from "lucide-react";
 import Link from "next/link";
-import { api } from "../../convex/_generated/api";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { topics } from "../../convex/schema";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { UserNewsFeed } from "../../components/Containers/UserNewsFeed";
-import { UserStats } from "../../components/UI/UserStats";
-import { UserAchievements } from "../../components/UI/UserAchievements";
-import { ReadingHistory } from "../../components/UI/ReadingHistory";
 import { ImageUpload } from "../../components/UI/ImageUpload";
+import { ReadingHistory } from "../../components/UI/ReadingHistory";
+import { UserAchievements } from "../../components/UI/UserAchievements";
+import { UserStats } from "../../components/UI/UserStats";
+import { api } from "../../convex/_generated/api";
+import { topics } from "../../convex/schema";
+import { Id } from "@/convex/_generated/dataModel";
 
 export default function ProfilePage() {
   const { signOut } = useAuthActions();
@@ -74,7 +73,9 @@ export default function ProfilePage() {
   const handleSaveProfile = async () => {
     try {
       if (editingImageStorageId) {
-        await updateUserImage({ storageId: editingImageStorageId as any });
+        await updateUserImage({
+          storageId: editingImageStorageId as Id<"_storage">,
+        });
       }
 
       await patchUser({
@@ -87,7 +88,7 @@ export default function ProfilePage() {
       setEditingImageStorageId(null);
       setResetImageTrigger((prev) => prev + 1);
       toast.success("Profile updated successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to update profile");
     }
   };
@@ -349,10 +350,10 @@ export default function ProfilePage() {
             <UserStats userTopics={user.topics || []} />
 
             {/* User Achievements */}
-            <UserAchievements userTopics={user.topics || []} />
+            <UserAchievements />
 
             {/* Reading History */}
-            <ReadingHistory userTopics={user.topics || []} />
+            <ReadingHistory />
           </div>
         </div>
       </div>

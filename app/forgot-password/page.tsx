@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setEmailSent(true);
       toast.success("Password reset email sent!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to send reset email. Please try again.");
     } finally {
       setSubmitting(false);
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
                 CHECK YOUR EMAIL
               </h1>
               <p className="text-xl lg:text-2xl font-semibold text-neutral-600 leading-relaxed">
-                We've sent you a password reset link
+                We&apos;ve sent you a password reset link
               </p>
             </div>
 
@@ -69,8 +69,9 @@ export default function ForgotPasswordPage() {
                   Email Sent Successfully
                 </h3>
                 <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
-                  We've sent a password reset link to <strong>{email}</strong>.
-                  Please check your inbox and follow the instructions.
+                  We&apos;ve sent a password reset link to{" "}
+                  <strong>{email}</strong>. Please check your inbox and follow
+                  the instructions.
                 </p>
               </div>
 
@@ -80,7 +81,7 @@ export default function ForgotPasswordPage() {
                 </h3>
                 <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
                   The reset link will expire in 24 hours for security reasons.
-                  If you don't see the email, check your spam folder.
+                  If you don&apos;t see the email, check your spam folder.
                 </p>
               </div>
             </div>
@@ -131,7 +132,7 @@ export default function ForgotPasswordPage() {
               FORGOT PASSWORD?
             </h1>
             <p className="text-xl lg:text-2xl font-semibold text-neutral-600 leading-relaxed">
-              No worries, we'll help you get back in
+              No worries, we&apos;ll help you get back in
             </p>
           </div>
 
@@ -141,8 +142,8 @@ export default function ForgotPasswordPage() {
                 Secure Password Reset
               </h3>
               <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
-                Enter your email address and we'll send you a secure link to
-                reset your password. Your account will remain protected.
+                Enter your email address and we&apos;ll send you a secure link
+                to reset your password. Your account will remain protected.
               </p>
             </div>
 
@@ -163,8 +164,8 @@ export default function ForgotPasswordPage() {
                 Quick & Easy
               </h3>
               <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
-                The process takes just a few minutes. You'll be back to reading
-                your personalized news in no time.
+                The process takes just a few minutes. You&apos;ll be back to
+                reading your personalized news in no time.
               </p>
             </div>
           </div>

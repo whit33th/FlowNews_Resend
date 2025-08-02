@@ -53,12 +53,14 @@ export default function SignInPage() {
 
       await signIn("password", formDataObj);
       toast.success("Welcome back!");
-    } catch (error: any) {
+    } catch (error) {
       let toastTitle = "Failed to sign in";
-      if (error.message.includes("Invalid password")) {
-        toastTitle = "Invalid email or password. Please try again.";
-      } else if (error.message.includes("not found")) {
-        toastTitle = "Account not found. Please sign up instead.";
+      if (error instanceof Error) {
+        if (error.message.includes("Invalid password")) {
+          toastTitle = "Invalid email or password. Please try again.";
+        } else if (error.message.includes("not found")) {
+          toastTitle = "Account not found. Please sign up instead.";
+        }
       }
       toast.error(toastTitle);
     } finally {
@@ -208,7 +210,7 @@ export default function SignInPage() {
 
               <div className="text-center">
                 <p className="text-base text-neutral-600">
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <Link
                     href="/signup"
                     className="text-black font-semibold hover:underline"

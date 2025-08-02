@@ -8,7 +8,7 @@ import Image from "next/image";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
 import { getContentForArticle } from "../../../helpers/loremIpsum";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 
 export default function NewsArticlePage() {
@@ -16,7 +16,7 @@ export default function NewsArticlePage() {
   const newsId = params.newsId as string;
   const hasIncrementedViews = useRef(false);
   const hasAddedToHistory = useRef(false);
-  const [readingStartTime] = useState(Date.now());
+  // const [readingStartTime] = useState(Date.now());
 
   const article = useQuery(api.news.getNewsById, { id: newsId as Id<"news"> });
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
@@ -30,12 +30,10 @@ export default function NewsArticlePage() {
     }
   }, [newsId, incrementViews]);
 
-  // Добавляем статью в историю чтения при загрузке страницы
   useEffect(() => {
     if (newsId && !hasAddedToHistory.current && article) {
       hasAddedToHistory.current = true;
 
-      // Вычисляем примерное время чтения (можно улучшить с помощью Intersection Observer)
       const estimatedReadingTime = Math.max(
         5,
         Math.ceil(article.text.length / 1000)
@@ -64,7 +62,7 @@ export default function NewsArticlePage() {
             Article Not Found
           </h1>
           <p className="text-neutral-600 mb-6">
-            The article you're looking for doesn't exist.
+            The article you&apos;re looking for doesn&apos;t exist.
           </p>
           <Link
             href="/"

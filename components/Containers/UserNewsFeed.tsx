@@ -1,18 +1,17 @@
 "use client";
 
-import { api } from "../../convex/_generated/api";
 import { useQuery } from "convex-helpers/react/cache";
+import { BookOpen, Calendar, Eye } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { memo } from "react";
-import { BookOpen, Eye, Calendar } from "lucide-react";
+import { api } from "../../convex/_generated/api";
 
 interface UserNewsFeedProps {
   userTopics: string[];
 }
 
 export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
-  const user = useQuery(api.auth.loggedInUser);
-
   const personalizedNews = useQuery(api.news.getPersonalizedNews, {
     userTopics: userTopics.length > 0 ? userTopics : undefined,
   });
@@ -50,7 +49,7 @@ export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
 
       <div className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {personalizedNews.slice(0, 6).map((news: any) => (
+          {personalizedNews.slice(0, 6).map((news) => (
             <Link
               key={news._id}
               href={`/news/${news._id}`}
@@ -59,10 +58,12 @@ export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
               <div className="border border-gray-200 overflow-hidden hover:bg-gray-50 transition-colors">
                 {news.image && (
                   <div className="aspect-video bg-gray-100 overflow-hidden">
-                    <img
+                    <Image
                       src={news.image}
                       alt={news.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      width={100}
+                      height={100}
                     />
                   </div>
                 )}

@@ -4,6 +4,7 @@ import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../../convex/_generated/api";
 import Link from "next/link";
 import { User } from "lucide-react";
+import Image from "next/image";
 
 export const ProfileButton = () => {
   const user = useQuery(api.auth.loggedInUser);
@@ -16,9 +17,11 @@ export const ProfileButton = () => {
       className="rounded flex items-center bg-white text-secondary border border-gray-200 font-semibold hover:bg-gray-50 hover:text-secondary-hover transition-colors shadow-sm hover:shadow overflow-hidden"
     >
       {user.image ? (
-        <img
+        <Image
           src={user.image}
           alt={user.name || "Profile"}
+          width={32}
+          height={32}
           className="w-8 h-8 object-cover"
         />
       ) : (

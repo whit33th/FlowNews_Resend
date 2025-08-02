@@ -5,6 +5,7 @@ import { Camera, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { api } from "../../convex/_generated/api";
+import Image from "next/image";
 
 interface ImageUploadProps {
   currentImage?: string;
@@ -109,15 +110,20 @@ export const ImageUpload = ({
       >
         {displayImage ? (
           <div className="w-full h-full relative ">
-            <img
+            <Image
               src={displayImage}
               alt="Profile"
               className="w-full h-full group-hover:animate-pulse object-cover rounded-full transition-transform invert duration-200 group-hover:scale-110"
+              width={100}
+              height={100}
             />
-            <img
+            <Image
               src={displayImage}
               alt="Profile"
               className="w-full absolute  inset-0 h-full rounded-full object-cover transition-transform duration-200 "
+              width={100}
+              height={100}
+              priority
             />
           </div>
         ) : (

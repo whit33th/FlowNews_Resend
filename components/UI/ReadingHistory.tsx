@@ -5,11 +5,7 @@ import { api } from "../../convex/_generated/api";
 import Link from "next/link";
 import { Clock, Eye, Calendar, BookOpen } from "lucide-react";
 
-interface ReadingHistoryProps {
-  userTopics: string[];
-}
-
-export const ReadingHistory = ({ userTopics }: ReadingHistoryProps) => {
+export const ReadingHistory = () => {
   const readingHistory = useQuery(api.profile.getUserReadingHistory, {
     limit: 10,
   });

@@ -4,21 +4,7 @@ import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import { Trophy, Star, Award, Target, Zap, BookOpen } from "lucide-react";
 
-interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  unlocked: boolean;
-  progress?: number;
-  maxProgress?: number;
-}
-
-interface UserAchievementsProps {
-  userTopics: string[];
-}
-
-export const UserAchievements = ({}: UserAchievementsProps) => {
+export const UserAchievements = () => {
   const achievements = useQuery(api.profile.getUserAchievements);
 
   if (!achievements) {
