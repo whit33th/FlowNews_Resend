@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArticleImage } from "../UI/ArticleImage";
-import { getContentForArticle } from "../../helpers/loremIpsum";
+import { getContentForArticle } from "@/helpers/loremIpsum";
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery, useQuery } from "convex/react";
 

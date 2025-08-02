@@ -1,16 +1,24 @@
+"use client";
 import { NavigationMenu } from "../UI/NavigationMenu";
 import { HeaderActions } from "../UI/HeaderActions";
+import { useMemo } from "react";
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 
-interface NavigationItem {
-  label: string;
-  href: string;
-}
+export const HeaderNavigation = () => {
+  const allTopics = useQuery(api.news.getAllTopics);
 
-interface HeaderNavigationProps {
-  navigationItems: NavigationItem[];
-}
-
-export const HeaderNavigation = ({ navigationItems }: HeaderNavigationProps) => {
+  const navigationItems = useMemo(
+    () => [
+      { label: "LATEST", href: "#" },
+      { label: "FEATURED", href: "#" },
+      ...(allTopics?.slice(0, 10) || []).map((topic) => ({
+        label: topic.toUpperCase(),
+        href: `#${topic}`,
+      })),
+    ],
+    [allTopics]
+  );
   return (
     <div className="mt-3 lg:mt-4">
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3 lg:gap-0">
@@ -21,4 +29,4 @@ export const HeaderNavigation = ({ navigationItems }: HeaderNavigationProps) => 
       </div>
     </div>
   );
-}; 
+};

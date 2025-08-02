@@ -31,7 +31,7 @@ function AuthenticatedContent() {
 
 const NewsContent = () => {
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
-
+  console.log(!!isSubscribed);
   return (
     <div className="flex flex-col lg:flex-row h-full gap-2 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-6 overflow-hidden">
       <div className="w-full lg:w-1/4 flex flex-col h-full min-w-0">
@@ -47,10 +47,14 @@ const NewsContent = () => {
         <div className="p-3 sm:p-4 bg-blue-200 flex flex-col sm:flex-row sm:justify-between sm:items-center  gap-2 sm:gap-0">
           <div className="flex flex-col">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold">
-              Unlock Premium Articles
+              {isSubscribed
+                ? "All Premium Articles Unlocked!"
+                : "Unlock Premium Articles"}
             </h2>
             <p className="text-base sm:text-lg">
-              Subscribe for full access to exclusive news and features.
+              {isSubscribed
+                ? "You have full access to exclusive news and features."
+                : "Subscribe for full access to exclusive news and features."}
             </p>
           </div>
         </div>

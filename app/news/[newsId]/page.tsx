@@ -13,12 +13,7 @@ export default function NewsArticlePage() {
   const newsId = params.newsId as string;
 
   const article = useQuery(api.news.getNewsById, { id: newsId as any });
-  const loggedInUser = useQuery(api.auth.loggedInUser);
-  const subscriber = useQuery(api.subscribers.getSubscriber);
-  const subscriberByEmail = useQuery(
-    api.subscribers.getSubscriberByEmail,
-    loggedInUser?.email ? { email: loggedInUser.email } : "skip"
-  );
+  const isSubscribed = useQuery(api.subscribers.getSubscriber);
 
   if (article === undefined) {
     return (
@@ -52,19 +47,18 @@ export default function NewsArticlePage() {
 
   // Check if article is premium and user is not subscribed
   const isPremiumArticle = article.isPremium;
-  const isSubscribed = !!(subscriber || subscriberByEmail);
   const showPremiumBlur = isPremiumArticle && !isSubscribed;
 
   const displayContent = getContentForArticle(
     article.text,
-    isSubscribed,
+    !isSubscribed,
     isPremiumArticle || false
   );
 
   const displaySummary = article.summary
     ? getContentForArticle(
         article.summary,
-        isSubscribed,
+        !isSubscribed,
         isPremiumArticle || false
       )
     : null;
@@ -91,25 +85,25 @@ export default function NewsArticlePage() {
         <div className="flex items-center gap-6 text-sm text-neutral-600 mb-6">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
-            <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
+            <span>{new Date(article._creationTime).toLocaleDateString()}</span>
           </div>
-          {article.source && (
+          {article.author && (
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              <span>{article.source}</span>
+              <span>{article.author}</span>
             </div>
           )}
         </div>
 
         {/* Tags */}
-        {article.tags && article.tags.length > 0 && (
+        {article.topics && article.topics.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
-            {article.tags.map((tag, index) => (
+            {article.topics.map((topic, index) => (
               <span
                 key={index}
                 className="px-3 py-1 bg-gray-100 text-black text-sm font-semibold rounded-full"
               >
-                {tag}
+                {topic}
               </span>
             ))}
           </div>
@@ -190,20 +184,6 @@ export default function NewsArticlePage() {
                 </span>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Source Link */}
-        {article.url && (
-          <div className="border-t border-gray-200 pt-6">
-            <a
-              href={article.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold"
-            >
-              Read full article at source
-            </a>
           </div>
         )}
       </div>
