@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "convex-helpers/react/cache";
+import { api } from "../../convex/_generated/api";
 import { Trophy, Star, Award, Target, Zap, BookOpen } from "lucide-react";
 
 interface Achievement {
@@ -16,61 +18,60 @@ interface UserAchievementsProps {
   userTopics: string[];
 }
 
-export const UserAchievements = ({ userTopics }: UserAchievementsProps) => {
-  const achievements: Achievement[] = [
-    {
-      id: "first-read",
-      title: "First Reader",
-      description: "Read your first article",
-      icon: <BookOpen className="w-5 h-5" />,
-      unlocked: true,
-    },
-    {
-      id: "topic-explorer",
-      title: "Topic Explorer",
-      description: "Follow 3 different topics",
-      icon: <Target className="w-5 h-5" />,
-      unlocked: userTopics.length >= 3,
-      progress: userTopics.length,
-      maxProgress: 3,
-    },
-    {
-      id: "daily-reader",
-      title: "Daily Reader",
-      description: "Read articles for 7 consecutive days",
-      icon: <Star className="w-5 h-5" />,
-      unlocked: false,
-      progress: 3,
-      maxProgress: 7,
-    },
-    {
-      id: "news-junkie",
-      title: "News Junkie",
-      description: "Read 50 articles",
-      icon: <Trophy className="w-5 h-5" />,
-      unlocked: false,
-      progress: 25,
-      maxProgress: 50,
-    },
-    {
-      id: "speed-reader",
-      title: "Speed Reader",
-      description: "Read 5 articles in one day",
-      icon: <Zap className="w-5 h-5" />,
-      unlocked: false,
-      progress: 2,
-      maxProgress: 5,
-    },
-    {
-      id: "diverse-reader",
-      title: "Diverse Reader",
-      description: "Read articles from all major topics",
-      icon: <Award className="w-5 h-5" />,
-      unlocked: userTopics.length >= 5,
-      progress: userTopics.length,
-      maxProgress: 5,
-    },
-  ];
+export const UserAchievements = ({}: UserAchievementsProps) => {
+  const achievements = useQuery(api.profile.getUserAchievements);
+
+  if (!achievements) {
+    return (
+      <div className="bg-white border border-gray-200">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-black flex items-center gap-2">
+              <Trophy className="w-5 h-5" />
+              Achievements
+            </h3>
+            <div className="text-sm text-neutral-600">Loading...</div>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="animate-pulse">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="p-4 border border-gray-200">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-gray-200 rounded"></div>
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const getAchievementIcon = (id: string) => {
+    switch (id) {
+      case "first-read":
+        return <BookOpen className="w-5 h-5" />;
+      case "topic-explorer":
+        return <Target className="w-5 h-5" />;
+      case "daily-reader":
+        return <Star className="w-5 h-5" />;
+      case "news-junkie":
+        return <Trophy className="w-5 h-5" />;
+      case "speed-reader":
+        return <Zap className="w-5 h-5" />;
+      case "diverse-reader":
+        return <Award className="w-5 h-5" />;
+      default:
+        return <Trophy className="w-5 h-5" />;
+    }
+  };
 
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
 
@@ -105,7 +106,7 @@ export const UserAchievements = ({ userTopics }: UserAchievementsProps) => {
                       : "bg-gray-300 text-gray-500"
                   }`}
                 >
-                  {achievement.icon}
+                  {getAchievementIcon(achievement.id)}
                 </div>
 
                 <div className="flex-1">

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ArticleImage } from "../../UI/ArticleImage";
-import { Doc } from "@/convex/_generated/dataModel";
+
 import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 

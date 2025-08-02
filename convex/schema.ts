@@ -19,6 +19,7 @@ export const topics = [
   "Travel",
   "Food",
 ];
+
 const applicationTables = {
   users: defineTable({
     name: v.optional(v.string()),
@@ -28,6 +29,11 @@ const applicationTables = {
     topics: v.optional(v.array(v.string())),
     onboarded: v.optional(v.boolean()),
     isAnonymous: v.optional(v.boolean()),
+    // Статистика пользователя
+    articlesRead: v.optional(v.number()),
+    dayStreak: v.optional(v.number()),
+    lastReadDate: v.optional(v.number()),
+    favoriteTopic: v.optional(v.string()),
   }).index("by_onboarded", ["onboarded"]),
 
   news: defineTable({
@@ -44,6 +50,36 @@ const applicationTables = {
   })
     .index("by_topics", ["topics"])
     .index("by_views", ["views"]),
+
+  // История чтения пользователя
+  readingHistory: defineTable({
+    userId: v.id("users"),
+    newsId: v.id("news"),
+    readAt: v.number(),
+    readingTime: v.optional(v.number()), // в минутах
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_and_date", ["userId", "readAt"]),
+
+  // Достижения пользователя
+  userAchievements: defineTable({
+    userId: v.id("users"),
+    achievementId: v.string(),
+    unlockedAt: v.number(),
+    progress: v.optional(v.number()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_and_achievement", ["userId", "achievementId"]),
+
+  // Статистика чтения по дням
+  dailyStats: defineTable({
+    userId: v.id("users"),
+    date: v.string(), // формат YYYY-MM-DD
+    articlesRead: v.number(),
+    readingTime: v.number(), // в минутах
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_and_date", ["userId", "date"]),
 
   subscribers: defineTable({
     userId: v.optional(v.id("users")),

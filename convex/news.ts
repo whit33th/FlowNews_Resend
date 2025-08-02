@@ -55,14 +55,6 @@ export const getAllNewsPaginated = query({
   },
 });
 
-export const getNewsImage = query({
-  args: { id: v.id("news") },
-  handler: async (ctx, args) => {
-    const news = await ctx.db.get(args.id);
-    return await ctx.storage.getUrl(news?.image as Id<"_storage">);
-  },
-});
-
 export const getNewsById = query({
   args: { id: v.id("news") },
   handler: async (ctx, args) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../../convex/_generated/api";
 import Link from "next/link";
 import { User } from "lucide-react";

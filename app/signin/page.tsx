@@ -2,7 +2,7 @@
 
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex-helpers/react/cache";
-import { Authenticated, Unauthenticated } from "convex/react";
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";

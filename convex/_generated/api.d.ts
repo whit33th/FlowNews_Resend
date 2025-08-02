@@ -18,6 +18,7 @@ import type * as helpers_shared from "../helpers/shared.js";
 import type * as helpers_useStablePaginatedQuery from "../helpers/useStablePaginatedQuery.js";
 import type * as http from "../http.js";
 import type * as news from "../news.js";
+import type * as profile from "../profile.js";
 import type * as router from "../router.js";
 import type * as subscribers from "../subscribers.js";
 import type * as users from "../users.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   "helpers/useStablePaginatedQuery": typeof helpers_useStablePaginatedQuery;
   http: typeof http;
   news: typeof news;
+  profile: typeof profile;
   router: typeof router;
   subscribers: typeof subscribers;
   users: typeof users;

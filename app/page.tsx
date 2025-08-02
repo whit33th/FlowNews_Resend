@@ -1,12 +1,7 @@
 "use client";
 
 import { useQuery } from "convex-helpers/react/cache";
-import {
-  Authenticated,
-  Unauthenticated,
-  useConvexAuth,
-  usePaginatedQuery,
-} from "convex/react";
+import { Authenticated, Unauthenticated, useConvexAuth } from "convex/react";
 import { ArticleList } from "../components/Containers/ArticleList/ArticleList";
 import { MainArticle } from "../components/Containers/MainArticle";
 import { OnboardingFlow } from "../components/Containers/OnboardingFlow";

@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+
 import Link from "next/link";
 import { SignOutButton } from "./SignOutButton";
 import { ProfileButton } from "./ProfileButton";

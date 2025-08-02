@@ -1,22 +1,44 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
-import { BookOpen, Eye, Calendar, TrendingUp } from "lucide-react";
+import { BookOpen, Calendar, TrendingUp } from "lucide-react";
 
 interface UserStatsProps {
   userTopics: string[];
 }
 
-export const UserStats = ({ userTopics }: UserStatsProps) => {
-  const user = useQuery(api.auth.loggedInUser);
+export const UserStats = ({}: UserStatsProps) => {
+  const userStats = useQuery(api.profile.getUserStats);
 
-  const stats = {
-    articlesRead: Math.floor(Math.random() * 100) + 50,
-    topicsFollowed: userTopics.length,
-    readingStreak: Math.floor(Math.random() * 30) + 1,
-    favoriteTopic: userTopics.length > 0 ? userTopics[0] : "None",
-  };
+  if (!userStats) {
+    return (
+      <div className="bg-white border border-gray-200">
+        <div className="p-6 border-b border-gray-200">
+          <h3 className="text-xl font-bold text-black flex items-center gap-2">
+            <TrendingUp className="w-5 h-5" />
+            Reading Statistics
+          </h3>
+        </div>
+        <div className="p-6">
+          <div className="animate-pulse">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="text-center p-4 bg-gray-50 border border-gray-200"
+                >
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-8 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white border border-gray-200">
@@ -28,13 +50,13 @@ export const UserStats = ({ userTopics }: UserStatsProps) => {
       </div>
 
       <div className="p-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-gray-50 border border-gray-200">
             <div className="flex items-center justify-center mb-2">
               <BookOpen className="w-6 h-6 text-black" />
             </div>
             <div className="text-2xl font-bold text-black">
-              {stats.articlesRead}
+              {userStats.articlesRead}
             </div>
             <div className="text-sm text-neutral-600 font-semibold">
               Articles Read
@@ -43,22 +65,10 @@ export const UserStats = ({ userTopics }: UserStatsProps) => {
 
           <div className="text-center p-4 bg-gray-50 border border-gray-200">
             <div className="flex items-center justify-center mb-2">
-              <Eye className="w-6 h-6 text-black" />
-            </div>
-            <div className="text-2xl font-bold text-black">
-              {stats.topicsFollowed}
-            </div>
-            <div className="text-sm text-neutral-600 font-semibold">
-              Topics Followed
-            </div>
-          </div>
-
-          <div className="text-center p-4 bg-gray-50 border border-gray-200">
-            <div className="flex items-center justify-center mb-2">
               <Calendar className="w-6 h-6 text-black" />
             </div>
             <div className="text-2xl font-bold text-black">
-              {stats.readingStreak}
+              {userStats.dayStreak}
             </div>
             <div className="text-sm text-neutral-600 font-semibold">
               Day Streak
@@ -70,7 +80,7 @@ export const UserStats = ({ userTopics }: UserStatsProps) => {
               <TrendingUp className="w-6 h-6 text-black" />
             </div>
             <div className="text-lg font-bold text-black truncate">
-              {stats.favoriteTopic}
+              {userStats.favoriteTopic}
             </div>
             <div className="text-sm text-neutral-600 font-semibold">
               Top Topic
@@ -84,16 +94,22 @@ export const UserStats = ({ userTopics }: UserStatsProps) => {
           </h4>
           <div className="space-y-2 text-sm text-neutral-600">
             <div className="flex justify-between">
-              <span>Average reading time per day:</span>
-              <span className="font-semibold">15 minutes</span>
+              <span>Average reading time per article:</span>
+              <span className="font-semibold">
+                {userStats.averageReadingTime} minutes
+              </span>
             </div>
             <div className="flex justify-between">
-              <span>Most active reading time:</span>
-              <span className="font-semibold">Morning (8-10 AM)</span>
+              <span>Total reading time:</span>
+              <span className="font-semibold">
+                {Math.round(userStats.totalReadingTime / 60)} hours
+              </span>
             </div>
             <div className="flex justify-between">
-              <span>Preferred content type:</span>
-              <span className="font-semibold">Breaking News</span>
+              <span>Active days this month:</span>
+              <span className="font-semibold">
+                {userStats.recentActivity} days
+              </span>
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@ export const ArticleImage = ({
   isPremium,
   isSubscribed,
   premiumLabel = "PREMIUM",
-  isAnonymous,
+
 }: ArticleImageProps) => {
   const shouldBlur = !isSubscribed && isPremium;
 

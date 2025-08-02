@@ -4,7 +4,7 @@ import "./globals.css";
 import { Convex } from "../components/layouts/ContextProvider/ConvexPovider";
 import Header from "@/components/Containers/Header/Header";
 import { Toaster } from "sonner";
-import Image from "next/image";
+
 
 const yrsa = Yrsa({
   variable: "--font-yrsa",

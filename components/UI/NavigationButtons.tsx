@@ -1,6 +1,5 @@
 import { PaginationStatus } from "convex/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
 
 interface NavigationButtonsProps {
   page: number;
@@ -11,7 +10,7 @@ interface NavigationButtonsProps {
 }
 
 export const NavigationButtons = ({
-  status,
+
   onNext,
   onPrev,
   page,

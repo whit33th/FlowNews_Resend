@@ -3,8 +3,7 @@ import { NavigationMenu } from "../../UI/NavigationMenu";
 import { HeaderActions } from "./HeaderActions";
 import { useMemo } from "react";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
-
+import { useQuery } from "convex-helpers/react/cache";
 export const HeaderNavigation = () => {
   const allTopics = useQuery(api.news.getAllTopics);
 

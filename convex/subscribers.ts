@@ -31,21 +31,3 @@ export const getSubscriber = query({
     return !!subscriber;
   },
 });
-
-export const putchSubscriber = mutation({
-  args: schema.tables.subscribers.validator,
-  handler: async (ctx, args) => {
-    const { topics } = args;
-    const user = await getUser(ctx);
-    if (!user) return null;
-
-    const subscriber = await ctx.db
-      .query("subscribers")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .unique();
-    if (!subscriber) return null;
-    return ctx.db.patch(subscriber._id, {
-      topics,
-    });
-  },
-});

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "npx tsx scripts/seed-data.ts"
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.80",
@@ -33,6 +34,7 @@
     "eslint-config-next": "15.4.5",
     "postcss": "~8",
     "tailwindcss": "~3",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

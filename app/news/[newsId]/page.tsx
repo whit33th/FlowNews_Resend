@@ -1,23 +1,27 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
+import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
 import { getContentForArticle } from "../../../helpers/loremIpsum";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 
 export default function NewsArticlePage() {
   const params = useParams();
   const newsId = params.newsId as string;
   const hasIncrementedViews = useRef(false);
+  const hasAddedToHistory = useRef(false);
+  const [readingStartTime] = useState(Date.now());
 
   const article = useQuery(api.news.getNewsById, { id: newsId as Id<"news"> });
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
   const incrementViews = useMutation(api.news.incrementViews);
+  const addToReadingHistory = useMutation(api.profile.addToReadingHistory);
 
   useEffect(() => {
     if (newsId && !hasIncrementedViews.current) {
@@ -25,6 +29,24 @@ export default function NewsArticlePage() {
       incrementViews({ newsId: newsId as Id<"news"> });
     }
   }, [newsId, incrementViews]);
+
+  // Добавляем статью в историю чтения при загрузке страницы
+  useEffect(() => {
+    if (newsId && !hasAddedToHistory.current && article) {
+      hasAddedToHistory.current = true;
+
+      // Вычисляем примерное время чтения (можно улучшить с помощью Intersection Observer)
+      const estimatedReadingTime = Math.max(
+        5,
+        Math.ceil(article.text.length / 1000)
+      );
+
+      addToReadingHistory({
+        newsId: newsId as Id<"news">,
+        readingTime: estimatedReadingTime,
+      });
+    }
+  }, [newsId, article, addToReadingHistory]);
 
   if (article === undefined) {
     return (

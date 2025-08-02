@@ -2,10 +2,10 @@
 
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex-helpers/react/cache";
-import { Authenticated, Unauthenticated } from "convex/react";
+
 import { useState } from "react";
 import { toast } from "sonner";
-import Image from "next/image";
+
 import { Mail, Lock, User, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { api } from "../../convex/_generated/api";

@@ -1,7 +1,7 @@
-import { Logo } from "./Logo";
+
 import { SiteTitle } from "../../UI/SiteTitle";
 import { ContactInfo } from "../../UI/ContactInfo";
-import Image from "next/image";
+
 
 export const HeaderTop = () => {
   return (

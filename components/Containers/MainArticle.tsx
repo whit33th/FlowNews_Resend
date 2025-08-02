@@ -1,6 +1,6 @@
 "use client";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
 import { useStablePaginatedQuery } from "../../convex/helpers/useStablePaginatedQuery";
 import Link from "next/link";
 import { useState } from "react";

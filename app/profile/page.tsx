@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useQuery, useMutation } from "convex/react";
-import { Authenticated, Unauthenticated } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
+import { useMutation } from "convex/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -14,7 +14,6 @@ import {
   BookOpen,
   Calendar,
   Mail,
-  MapPin,
   Edit3,
   Save,
 } from "lucide-react";
@@ -338,10 +337,6 @@ export default function ProfilePage() {
                     <span>
                       Email notifications: {user.email ? "Enabled" : "Disabled"}
                     </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-4 h-4" />
-                    <span>Location-based news: Available</span>
                   </div>
                 </div>
               </div>

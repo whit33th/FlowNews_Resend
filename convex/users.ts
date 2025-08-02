@@ -2,7 +2,6 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getUser } from "./helpers/shared";
 import schema from "./schema";
-import { Id } from "./_generated/dataModel";
 
 export const patchUser = mutation({
   args: schema.tables.users.validator,
