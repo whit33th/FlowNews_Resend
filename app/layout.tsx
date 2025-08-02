@@ -4,6 +4,7 @@ import "./globals.css";
 import { Convex } from "../components/layouts/ContextProvider/ConvexPovider";
 import Header from "@/components/Containers/Header/Header";
 import { Toaster } from "sonner";
+import Image from "next/image";
 
 const yrsa = Yrsa({
   variable: "--font-yrsa",
@@ -24,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${yrsa.variable} antialiased  bg-[#FFFFFF] h-dvh flex flex-col `}
+        className={`${yrsa.variable} antialiased bg-[#FFFFFF] h-full lg:h-dvh flex flex-col `}
       >
         <Convex>
           <Header />
-          <main className="flex-1  ">{children}</main>
+          <main className="flex-1">{children}</main>
         </Convex>
         <Toaster richColors />
       </body>

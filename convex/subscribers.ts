@@ -24,8 +24,11 @@ export const getSubscriber = query({
   handler: async (ctx) => {
     const user = await getUser(ctx);
     if (!user) return null;
-    const subscriber = await ctx.db.query("subscribers").unique();
-    return subscriber;
+    const subscriber = await ctx.db
+      .query("subscribers")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .unique();
+    return !!subscriber;
   },
 });
 

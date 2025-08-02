@@ -7,8 +7,9 @@ interface ArticleImageProps {
   height: number;
   className?: string;
   isPremium?: boolean;
-  isSubscribed?: boolean;
+  isSubscribed?: boolean | null;
   premiumLabel?: string;
+  isAnonymous?: boolean;
 }
 
 export const ArticleImage = ({
@@ -20,6 +21,7 @@ export const ArticleImage = ({
   isPremium,
   isSubscribed,
   premiumLabel = "PREMIUM",
+  isAnonymous,
 }: ArticleImageProps) => {
   const shouldBlur = !isSubscribed && isPremium;
 
@@ -30,7 +32,7 @@ export const ArticleImage = ({
         alt={alt}
         width={width}
         height={height}
-        className={`object-cover w-full h-full grayscale shadow-md  `}
+        className={`object-cover object-center w-full h-full grayscale shadow-md  `}
       />
       {shouldBlur && (
         <div className="absolute inset-0 flex items-center backdrop-blur-sm justify-center bg-black bg-opacity-50">

@@ -17,10 +17,9 @@ export const MainArticle = () => {
       initialNumItems: 2,
     }
   );
-  const isSubscribed = useQuery(api.subscribers.getSubscriber);
 
-  console.log(results);
   const [page, setPage] = useState(0);
+  const isSubscribed = useQuery(api.subscribers.getSubscriber);
 
   function onNext(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -38,7 +37,6 @@ export const MainArticle = () => {
     }
   }
 
-  // Check if we have results and the current page is valid
   if (isLoading || !results || results.length === 0) {
     return (
       <div className="flex-1 flex flex-col h-full p-3 lg:p-4 border-x border-gray-200">
@@ -64,7 +62,7 @@ export const MainArticle = () => {
 
   const displayContent = getContentForArticle(
     currentArticle.text,
-    !isSubscribed,
+    isSubscribed,
     currentArticle.isPremium || false
   );
 
@@ -73,37 +71,46 @@ export const MainArticle = () => {
   return (
     <Link
       href={`/news/${currentArticle._id}`}
-      className="flex-1 flex flex-col h-full hover:opacity-90 transition-opacity duration-300"
+      className="flex-1 flex flex-col h-full hover:opacity-90 transition-opacity duration-300 min-h-0 overflow-hidden"
     >
-      {/* Full-width image */}
       <ArticleImage
-        src="/image.png"
+        src={currentArticle.image ?? "/image.png"}
         alt="Main article"
-        width={800}
-        height={256}
-        className={`h-48 sm:h-60 md:h-56 lg:h-40 xl:h-50 2xl:h-56 w-full`}
+        width={1200}
+        height={600}
+        className={`
+          w-full
+          h-auto
+          aspect-video
+          max-h-[300px]
+          lg:max-h-[200px]
+          2xl:max-h-[500px]
+          flex-shrink-0
+        `}
         isPremium={currentArticle.isPremium}
-        isSubscribed={!isSubscribed}
+        isSubscribed={isSubscribed}
       />
 
-      {/* Article text */}
-      <div className="flex flex-col h-full p-3 lg:p-4 border-x border-gray-200">
-        <div className="flex-1 flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-4">
-          <h1 className="text-2xl sm:text-3xl md:text-3xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold text-black line-clamp-4 hover:text-neutral-700 transition-colors duration-300">
+      <div className="flex flex-col h-full  border-x border-gray-200 min-h-0 overflow-hidden">
+        <div className="flex-1 flex flex-col p-3 lg:p-4 gap-2 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-4 min-h-0 overflow-hidden relative">
+          <h1 className="text-2xl sm:text-3xl md:text-3xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold text-black line-clamp-4 hover:text-neutral-700 transition-colors duration-300 flex-shrink-0">
             {currentArticle.title}
           </h1>
           <p
-            className={`text-base sm:text-lg md:text-lg lg:text-base xl:text-lg font-semibold text-neutral-600 leading-relaxed line-clamp-[8] lg:line-clamp-[10] 2xl:line-clamp-[17] ${
+            className={`text-base sm:text-lg md:text-lg lg:text-base xl:text-lg font-semibold text-neutral-600 leading-relaxed line-clamp-[10] lg:line-clamp-none ${
               showBlur ? "blur-sm" : ""
             }`}
           >
             {displayContent}
           </p>
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
         </div>
 
-        {/* Author info and navigation - at the bottom */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center pt-4 border-t border-gray-200 mt-4 gap-3 lg:gap-0">
-          <AuthorInfo publishedAt={currentArticle._creationTime} />
+        <div className="flex flex-col lg:flex-row lg:justify-between p-4 lg:items-center pt-4 border-t border-gray-200 mt-4 gap-3 lg:gap-0 flex-shrink-0">
+          <AuthorInfo
+            authorImage={currentArticle.authorImage ?? "/image.png"}
+            publishedAt={currentArticle._creationTime}
+          />
           <NavigationButtons
             status={status}
             onNext={onNext}

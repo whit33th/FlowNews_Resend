@@ -1,12 +1,12 @@
-import { useRef } from "react";
 import { usePaginatedQuery } from "convex/react";
+import { useRef } from "react";
 
 export function useStablePaginatedQuery(name: any, args: any, options: any) {
-  const result = usePaginatedQuery(name, args, options);
-  const stored = useRef(result);
+  const news = usePaginatedQuery(name, args, options);
+  const stored = useRef(news);
 
-  if (result.status !== "LoadingMore") {
-    stored.current = result;
+  if (news.status !== "LoadingMore") {
+    stored.current = news;
   }
 
   return stored.current;

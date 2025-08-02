@@ -23,4 +23,4 @@ export const NavigationMenu = ({ navigationItems }: NavigationMenuProps) => {
       ))}
     </div>
   );
-}; 
+};

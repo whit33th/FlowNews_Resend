@@ -1,19 +1,30 @@
 "use client";
 
-import { useQuery } from "convex-helpers/react/cache";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
 import { getContentForArticle } from "../../../helpers/loremIpsum";
+import { useEffect, useRef } from "react";
+import { Id } from "@/convex/_generated/dataModel";
 
 export default function NewsArticlePage() {
   const params = useParams();
   const newsId = params.newsId as string;
+  const hasIncrementedViews = useRef(false);
 
-  const article = useQuery(api.news.getNewsById, { id: newsId as any });
+  const article = useQuery(api.news.getNewsById, { id: newsId as Id<"news"> });
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
+  const incrementViews = useMutation(api.news.incrementViews);
+
+  useEffect(() => {
+    if (newsId && !hasIncrementedViews.current) {
+      hasIncrementedViews.current = true;
+      incrementViews({ newsId: newsId as Id<"news"> });
+    }
+  }, [newsId, incrementViews]);
 
   if (article === undefined) {
     return (
@@ -45,27 +56,17 @@ export default function NewsArticlePage() {
     );
   }
 
-  // Check if article is premium and user is not subscribed
   const isPremiumArticle = article.isPremium;
   const showPremiumBlur = isPremiumArticle && !isSubscribed;
 
   const displayContent = getContentForArticle(
     article.text,
-    !isSubscribed,
+    isSubscribed,
     isPremiumArticle || false
   );
 
-  const displaySummary = article.summary
-    ? getContentForArticle(
-        article.summary,
-        !isSubscribed,
-        isPremiumArticle || false
-      )
-    : null;
-
   return (
     <div className="max-w-4xl mx-auto p-6 lg:p-8">
-      {/* Back Button */}
       <div className="mb-6">
         <Link
           href="/"
@@ -76,7 +77,6 @@ export default function NewsArticlePage() {
         </Link>
       </div>
 
-      {/* Article Header */}
       <div className="mb-8">
         <h1 className="text-3xl lg:text-4xl font-bold text-black mb-4 leading-tight">
           {article.title}
@@ -93,9 +93,12 @@ export default function NewsArticlePage() {
               <span>{article.author}</span>
             </div>
           )}
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">{article.views}</span>
+            <span>views</span>
+          </div>
         </div>
 
-        {/* Tags */}
         {article.topics && article.topics.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
             {article.topics.map((topic, index) => (
@@ -109,7 +112,6 @@ export default function NewsArticlePage() {
           </div>
         )}
 
-        {/* Premium notice */}
         {showPremiumBlur && (
           <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6">
             <div className="flex items-center gap-2 mb-2">
@@ -128,7 +130,6 @@ export default function NewsArticlePage() {
         )}
       </div>
 
-      {/* Article Image */}
       <div className="mb-8">
         <div className="w-full h-64 lg:h-96 relative">
           <Image
@@ -147,7 +148,6 @@ export default function NewsArticlePage() {
         </div>
       </div>
 
-      {/* Article Content */}
       <div className="prose prose-lg max-w-none">
         <div
           className={`text-lg leading-relaxed text-neutral-800 mb-8 ${
@@ -157,18 +157,19 @@ export default function NewsArticlePage() {
           {displayContent}
         </div>
 
-        {displaySummary && (
+        {article.summary && (
           <div
             className={`bg-gray-50 p-6 rounded-lg mb-8 ${
               showPremiumBlur ? "blur-sm" : ""
             }`}
           >
             <h3 className="text-xl font-bold text-black mb-3">Summary</h3>
-            <p className="text-neutral-700 leading-relaxed">{displaySummary}</p>
+            <p className="text-neutral-700 leading-relaxed">
+              {article.summary}
+            </p>
           </div>
         )}
 
-        {/* Mentions */}
         {article.mentions && article.mentions.length > 0 && (
           <div className="border-t border-gray-200 pt-6">
             <h3 className="text-lg font-bold text-black mb-3">

@@ -56,7 +56,6 @@ export function ProfileSettings() {
           Profile Settings
         </h1>
 
-        {/* User Info */}
         <div className="mb-8 pb-8 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Account Information
@@ -79,7 +78,6 @@ export function ProfileSettings() {
           </div>
         </div>
 
-        {/* Topic Preferences */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             News Interests
@@ -121,13 +119,11 @@ export function ProfileSettings() {
           )}
         </div>
 
-        {/* Current Subscriptions */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Current Subscriptions
           </h2>
 
-          {/* Topics */}
           {subscriber.topics.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-medium text-gray-800 mb-3">Topics</h3>
@@ -144,7 +140,6 @@ export function ProfileSettings() {
             </div>
           )}
 
-          {/* Hashtags */}
           {subscriber.hashtags.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-medium text-gray-800 mb-3">
@@ -163,7 +158,6 @@ export function ProfileSettings() {
             </div>
           )}
 
-          {/* Mentions */}
           {subscriber.mentions.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-medium text-gray-800 mb-3">
@@ -189,7 +183,6 @@ export function ProfileSettings() {
             )}
         </div>
 
-        {/* Account Status */}
         <div className="pt-8 border-t border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Account Status

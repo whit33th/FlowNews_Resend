@@ -25,7 +25,7 @@ Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
 // Function to get content based on subscription status and premium status
 export const getContentForArticle = (
   realContent: string,
-  isSubscribed: boolean,
+  isSubscribed: boolean | null = false,
   isPremium: boolean
 ): string => {
   if (isSubscribed || !isPremium) {

@@ -12,7 +12,6 @@ export const NewsletterSubscription = () => {
   const loggedInUser = useQuery(api.auth.loggedInUser);
   const [email, setEmail] = useState("");
 
-  // Set email from logged in user if available
   useEffect(() => {
     if (loggedInUser?.email) {
       setEmail(loggedInUser.email);

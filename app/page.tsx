@@ -31,10 +31,9 @@ function AuthenticatedContent() {
 
 const NewsContent = () => {
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
-  console.log(!!isSubscribed);
   return (
-    <div className="flex flex-col lg:flex-row h-full gap-2 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-6 overflow-hidden">
-      <div className="w-full lg:w-1/4 flex flex-col h-full min-w-0">
+    <div className="flex flex-col lg:flex-row h-full lg:h-[calc(100dvh-256px)] gap-2 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-6 overflow-hidden">
+      <div className="w-full lg:flex-1 flex flex-col h-full min-w-0">
         <SideArticles />
       </div>
 
@@ -42,8 +41,7 @@ const NewsContent = () => {
         <MainArticle />
       </div>
 
-      {/* Right Column - List and Newsletter */}
-      <div className="w-full lg:w-1/4 flex flex-col h-full min-w-0 px-2 sm:px-3 lg:px-3 xl:px-4 space-y-4">
+      <div className="w-full lg:flex-1 flex flex-col h-full min-w-0 px-2 sm:px-3 lg:px-3 xl:px-4 space-y-4 lg:overflow-y-auto">
         <div className="p-3 sm:p-4 bg-blue-200 flex flex-col sm:flex-row sm:justify-between sm:items-center  gap-2 sm:gap-0">
           <div className="flex flex-col">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold">

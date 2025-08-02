@@ -40,6 +40,7 @@ const applicationTables = {
     isPremium: v.boolean(),
     views: v.number(),
     author: v.optional(v.union(v.id("users"), v.string())),
+    authorImage: v.optional(v.union(v.id("_storageId"), v.string())),
   })
     .index("by_topics", ["topics"])
     .index("by_views", ["views"]),

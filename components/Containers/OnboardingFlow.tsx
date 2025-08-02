@@ -34,9 +34,7 @@ export function OnboardingFlow() {
 
   return (
     <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-6">
-      {/* Right Column - Onboarding Form */}
       <div className="flex-1 flex flex-col justify-center p-6 lg:p-8">
-        {/* Form Container */}
         <div className="max-w-md mx-auto w-full">
           <div className="text-center mb-8">
             <h2 className="text-3xl lg:text-4xl font-bold text-black mb-2">
@@ -48,9 +46,6 @@ export function OnboardingFlow() {
           </div>
 
           <div className="space-y-6">
-            {/* Email Field */}
-
-            {/* Topics Selection */}
             <div className="space-y-4">
               <label className="block text-sm font-semibold text-neutral-700">
                 Select your interests:
@@ -73,7 +68,6 @@ export function OnboardingFlow() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               onClick={() => handleOnboarding(false)}
               disabled={selectedTopics.length === 0}
@@ -82,7 +76,6 @@ export function OnboardingFlow() {
               Get Started
             </button>
 
-            {/* Skip Button */}
             <button
               onClick={() => handleOnboarding(true)}
               className="w-full px-6 py-3 bg-white text-black text-lg font-bold rounded-lg border-2 border-gray-100 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"

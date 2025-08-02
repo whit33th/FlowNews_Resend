@@ -1,6 +1,6 @@
 "use client";
-import { NavigationMenu } from "../UI/NavigationMenu";
-import { HeaderActions } from "../UI/HeaderActions";
+import { NavigationMenu } from "../../UI/NavigationMenu";
+import { HeaderActions } from "./HeaderActions";
 import { useMemo } from "react";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";

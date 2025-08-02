@@ -25,14 +25,12 @@ export default function SignUpPage() {
 
   const loggedInUser = useQuery(api.auth.loggedInUser);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (loggedInUser !== undefined && loggedInUser !== null) {
       router.push("/");
     }
   }, [loggedInUser, router]);
 
-  // Show loading while checking authentication
   if (loggedInUser === undefined) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -41,7 +39,6 @@ export default function SignUpPage() {
     );
   }
 
-  // Don't render if already authenticated
   if (loggedInUser !== null) {
     return null;
   }
@@ -86,10 +83,8 @@ export default function SignUpPage() {
 
   return (
     <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-6">
-      {/* Left Column - Welcome Content */}
       <div className="w-full lg:w-1/2 flex flex-col h-full">
         <div className="flex-1 flex flex-col gap-6 p-6 lg:p-8">
-          {/* Header */}
           <div className="text-center lg:text-left">
             <h1 className="text-4xl lg:text-5xl font-bold text-black mb-4">
               JOIN THE CHRONICLE
@@ -99,7 +94,6 @@ export default function SignUpPage() {
             </p>
           </div>
 
-          {/* Benefits */}
           <div className="flex-1 flex flex-col gap-6">
             <div className="border-l-4 border-black pl-6">
               <h3 className="text-lg lg:text-xl font-bold text-black mb-3">
@@ -125,7 +119,6 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          {/* Back to home */}
           <div className="text-center lg:text-left">
             <Link
               href="/"
@@ -138,10 +131,8 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      {/* Right Column - Sign Up Form */}
       <div className="w-full lg:w-1/2 flex flex-col h-full">
         <div className="flex-1 flex flex-col justify-center p-6 lg:p-8">
-          {/* Form Container */}
           <div className="max-w-md mx-auto w-full">
             <div className="text-center mb-8">
               <h2 className="text-3xl lg:text-4xl font-bold text-black mb-2">
@@ -153,7 +144,6 @@ export default function SignUpPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-neutral-700">
                   Full Name
@@ -171,7 +161,6 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              {/* Email Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-neutral-700">
                   Email Address
@@ -189,7 +178,6 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              {/* Password Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-neutral-700">
                   Password
@@ -209,7 +197,6 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              {/* Confirm Password Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-neutral-700">
                   Confirm Password
@@ -229,7 +216,6 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={submitting}
@@ -238,7 +224,6 @@ export default function SignUpPage() {
                 {submitting ? "Creating Account..." : "Create Account"}
               </button>
 
-              {/* Sign In Link */}
               <div className="text-center">
                 <p className="text-base text-neutral-600">
                   Already have an account?{" "}
@@ -252,7 +237,6 @@ export default function SignUpPage() {
               </div>
             </form>
 
-            {/* Divider */}
             <div className="flex items-center justify-center my-6">
               <hr className="flex-1 border-gray-300" />
               <span className="px-4 text-sm text-neutral-500 font-semibold">
@@ -261,7 +245,6 @@ export default function SignUpPage() {
               <hr className="flex-1 border-gray-300" />
             </div>
 
-            {/* Anonymous Sign In */}
             <button
               onClick={() => signIn("anonymous")}
               className="w-full px-6 py-4 bg-white text-black text-lg font-bold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl"

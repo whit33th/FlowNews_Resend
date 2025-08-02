@@ -16,14 +16,12 @@ export default function ForgotPasswordPage() {
 
   const loggedInUser = useQuery(api.auth.loggedInUser);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (loggedInUser !== undefined && loggedInUser !== null) {
       router.push("/");
     }
   }, [loggedInUser, router]);
 
-  // Show loading while checking authentication
   if (loggedInUser === undefined) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -32,7 +30,6 @@ export default function ForgotPasswordPage() {
     );
   }
 
-  // Don't render if already authenticated
   if (loggedInUser !== null) {
     return null;
   }
@@ -42,8 +39,6 @@ export default function ForgotPasswordPage() {
     setSubmitting(true);
 
     try {
-      // Здесь будет логика отправки email для сброса пароля
-      // Пока что просто симулируем успешную отправку
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setEmailSent(true);
       toast.success("Password reset email sent!");
@@ -57,7 +52,6 @@ export default function ForgotPasswordPage() {
   if (emailSent) {
     return (
       <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-6">
-        {/* Left Column - Success Content */}
         <div className="w-full lg:w-1/2 flex flex-col h-full">
           <div className="flex-1 flex flex-col gap-6 p-6 lg:p-8">
             <div className="text-center lg:text-left">
@@ -103,7 +97,6 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        {/* Right Column - Success Message */}
         <div className="w-full lg:w-1/2 flex flex-col h-full">
           <div className="flex-1 flex flex-col justify-center items-center p-6 lg:p-8">
             <div className="text-center max-w-md">
@@ -131,10 +124,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-6">
-      {/* Left Column - Help Content */}
       <div className="w-full lg:w-1/2 flex flex-col h-full">
         <div className="flex-1 flex flex-col gap-6 p-6 lg:p-8">
-          {/* Header */}
           <div className="text-center lg:text-left">
             <h1 className="text-4xl lg:text-5xl font-bold text-black mb-4">
               FORGOT PASSWORD?
@@ -144,7 +135,6 @@ export default function ForgotPasswordPage() {
             </p>
           </div>
 
-          {/* Help Info */}
           <div className="flex-1 flex flex-col gap-6">
             <div className="border-l-4 border-black pl-6">
               <h3 className="text-lg lg:text-xl font-bold text-black mb-3">
@@ -179,7 +169,6 @@ export default function ForgotPasswordPage() {
             </div>
           </div>
 
-          {/* Back to sign in */}
           <div className="text-center lg:text-left">
             <Link
               href="/signin"
@@ -192,10 +181,8 @@ export default function ForgotPasswordPage() {
         </div>
       </div>
 
-      {/* Right Column - Reset Form */}
       <div className="w-full lg:w-1/2 flex flex-col h-full">
         <div className="flex-1 flex flex-col justify-center p-6 lg:p-8">
-          {/* Form Container */}
           <div className="max-w-md mx-auto w-full">
             <div className="text-center mb-8">
               <h2 className="text-3xl lg:text-4xl font-bold text-black mb-2">
@@ -207,7 +194,6 @@ export default function ForgotPasswordPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-neutral-700">
                   Email Address
@@ -225,7 +211,6 @@ export default function ForgotPasswordPage() {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={submitting}
@@ -234,7 +219,6 @@ export default function ForgotPasswordPage() {
                 {submitting ? "Sending..." : "Send Reset Link"}
               </button>
 
-              {/* Back to sign in */}
               <div className="text-center">
                 <p className="text-base text-neutral-600">
                   Remember your password?{" "}
