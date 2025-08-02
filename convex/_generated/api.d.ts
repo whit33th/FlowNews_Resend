@@ -14,6 +14,8 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as auth from "../auth.js";
+import type * as helpers_shared from "../helpers/shared.js";
+import type * as helpers_useStablePaginatedQuery from "../helpers/useStablePaginatedQuery.js";
 import type * as http from "../http.js";
 import type * as news from "../news.js";
 import type * as router from "../router.js";
@@ -30,6 +32,8 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  "helpers/shared": typeof helpers_shared;
+  "helpers/useStablePaginatedQuery": typeof helpers_useStablePaginatedQuery;
   http: typeof http;
   news: typeof news;
   router: typeof router;

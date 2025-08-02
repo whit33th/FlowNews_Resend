@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "convex-helpers/react/cache";
+import { usePaginatedQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -9,9 +9,17 @@ import { memo } from "react";
 import "swiper/css";
 
 export const NewsSlider = memo(() => {
-  const latestNews = useQuery(api.news.getNewsFeed, { limit: 15 });
+  const latestNews = usePaginatedQuery(
+    api.news.getAllNewsPaginated,
+    {
+      order: "desc",
+    },
+    {
+      initialNumItems: 15,
+    }
+  );
 
-  if (!latestNews || latestNews.news.length === 0) {
+  if (!latestNews || latestNews.results.length === 0) {
     return (
       <div className="flex justify-center">
         <span className="text-xs lg:text-sm font-semibold text-black">
@@ -33,7 +41,7 @@ export const NewsSlider = memo(() => {
       spaceBetween={20}
       className="latest-news-swiper"
     >
-      {latestNews.news.map((news) => (
+      {latestNews.results.map((news) => (
         <SwiperSlide key={news._id} className="!w-auto py-2">
           <Link
             href={`/news/${news._id}`}

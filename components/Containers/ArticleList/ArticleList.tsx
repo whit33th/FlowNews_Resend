@@ -1,17 +1,21 @@
 import Link from "next/link";
 import { ArticleImage } from "../../UI/ArticleImage";
 import { Doc } from "@/convex/_generated/dataModel";
+import { usePaginatedQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
-interface ArticleListProps {
-  articles: Doc<"news">[];
-  isSubscribed: boolean;
-}
-
-export const ArticleList = ({ articles, isSubscribed }: ArticleListProps) => {
+export const ArticleList = () => {
+  const { results } = usePaginatedQuery(
+    api.news.getAllNewsPaginated,
+    { order: "desc" },
+    {
+      initialNumItems: 10,
+    }
+  );
   return (
     <div className="flex-1 px-2 sm:px-3 lg:px-3 xl:px-4">
       <ol className="flex flex-col gap-2 sm:gap-3 lg:gap-3 xl:gap-4 ">
-        {articles.map((article, idx) => {
+        {results.map((article, idx) => {
           return (
             <li
               key={idx}

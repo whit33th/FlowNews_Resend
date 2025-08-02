@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "News Article - NewsFlow",
-  description: "Read the full news article on NewsFlow",
+  title: "News Article - FlowNews",
+  description: "Read the full news article on FlowNews",
 };
 
 export default function NewsLayout({
@@ -11,4 +11,4 @@ export default function NewsLayout({
   children: React.ReactNode;
 }) {
   return children;
-} 
+}

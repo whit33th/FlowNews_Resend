@@ -1,32 +1,12 @@
-import { useState } from "react";
+import { topics } from "@/convex/schema";
 import { useMutation } from "convex/react";
-import { useQuery } from "convex-helpers/react/cache";
-import { api } from "../../convex/_generated/api";
+import { useState } from "react";
 import { toast } from "sonner";
-
-export const AVAILABLE_TOPICS = [
-  "Tech",
-  "Finance",
-  "Healthcare",
-  "Environment",
-  "Politics",
-  "Science",
-  "Sports",
-  "Entertainment",
-  "Music",
-  "Events",
-  "Nature",
-  "Business",
-  "Education",
-  "Travel",
-  "Food",
-];
+import { api } from "../../convex/_generated/api";
 
 export function OnboardingFlow() {
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [email, setEmail] = useState("");
-  const createSubscriber = useMutation(api.subscribers.createSubscriber);
-  const loggedInUser = useQuery(api.auth.loggedInUser);
+  const patchUser = useMutation(api.users.patchUser);
 
   const handleTopicToggle = (topic: string) => {
     setSelectedTopics((prev) =>
@@ -34,76 +14,83 @@ export function OnboardingFlow() {
     );
   };
 
-  const handleSubmit = async () => {
-    if (selectedTopics.length === 0) {
-      toast.error("Please select at least one topic");
-      return;
-    }
-
-    if (!email) {
-      toast.error("Please enter your email");
-      return;
+  const handleOnboarding = async (isSkip: boolean = false) => {
+    if (!isSkip) {
+      if (selectedTopics.length === 0) {
+        toast.error("Please select at least one topic");
+        return;
+      }
     }
 
     try {
-      await createSubscriber({ email, topics: selectedTopics });
-      toast.success("Welcome to NewsFlow! Your personalized feed is ready.");
-    } catch {
+      await patchUser({ onboarded: true, topics: selectedTopics });
+
+      toast.success("Welcome to FlowNews! Your personalized feed is ready.");
+    } catch (error) {
+      console.error(error);
       toast.error("Failed to create subscription");
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Welcome to NewsFlow!
-        </h1>
-        <p className="text-lg text-gray-600">
-          Choose your interests to get personalized news recommendations
-        </p>
-      </div>
+    <div className="flex flex-col lg:flex-row h-full gap-4 lg:gap-6">
+      {/* Right Column - Onboarding Form */}
+      <div className="flex-1 flex flex-col justify-center p-6 lg:p-8">
+        {/* Form Container */}
+        <div className="max-w-md mx-auto w-full">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl lg:text-4xl font-bold text-black mb-2">
+              Welcome to FlowNews!
+            </h2>
+            <p className="text-lg text-neutral-600">
+              Choose your interests to get personalized news recommendations
+            </p>
+          </div>
 
-      <div className="mb-8">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Email for daily digest
-        </label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={loggedInUser?.email || "Enter your email"}
-          className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
+          <div className="space-y-6">
+            {/* Email Field */}
 
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Select your interests:</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {AVAILABLE_TOPICS.map((topic) => (
+            {/* Topics Selection */}
+            <div className="space-y-4">
+              <label className="block text-sm font-semibold text-neutral-700">
+                Select your interests:
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {topics.map((topic) => (
+                  <button
+                    key={topic}
+                    type="button"
+                    onClick={() => handleTopicToggle(topic)}
+                    className={`p-3 rounded-lg border-2 transition-all text-sm font-semibold ${
+                      selectedTopics.includes(topic)
+                        ? "border-black bg-black text-white"
+                        : "border-gray-300 hover:border-gray-400 text-neutral-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Submit Button */}
             <button
-              key={topic}
-              onClick={() => handleTopicToggle(topic)}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                selectedTopics.includes(topic)
-                  ? "border-blue-500 bg-blue-50 text-blue-700"
-                  : "border-gray-200 hover:border-gray-300 text-gray-700"
-              }`}
+              onClick={() => handleOnboarding(false)}
+              disabled={selectedTopics.length === 0}
+              className="w-full px-6 py-3 bg-black text-white text-lg font-bold rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"
             >
-              <div className="font-medium">{topic}</div>
+              Get Started
             </button>
-          ))}
-        </div>
-      </div>
 
-      <div className="text-center">
-        <button
-          onClick={handleSubmit}
-          disabled={selectedTopics.length === 0 || !email}
-          className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          Get Started ({selectedTopics.length} topics selected)
-        </button>
+            {/* Skip Button */}
+            <button
+              onClick={() => handleOnboarding(true)}
+              className="w-full px-6 py-3 bg-white text-black text-lg font-bold rounded-lg border-2 border-gray-100 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"
+            >
+              Skip for now
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

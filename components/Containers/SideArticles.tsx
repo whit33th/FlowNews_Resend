@@ -1,20 +1,25 @@
 import Link from "next/link";
 import { ArticleImage } from "../UI/ArticleImage";
 import { getContentForArticle } from "../../helpers/loremIpsum";
-import { Doc } from "@/convex/_generated/dataModel";
+import { api } from "@/convex/_generated/api";
+import { usePaginatedQuery, useQuery } from "convex/react";
 
-interface SideArticlesProps {
-  articles: Doc<"news">[];
-  isSubscribed: boolean;
-}
+export const SideArticles = () => {
+  const isSubscribed = useQuery(api.subscribers.getSubscriber);
 
-export const SideArticles = ({ articles, isSubscribed }: SideArticlesProps) => {
+  const { results, loadMore } = usePaginatedQuery(
+    api.news.getAllNewsPaginated,
+    { order: "desc" },
+    {
+      initialNumItems: 2,
+    }
+  );
   return (
     <div className="flex-1 px-2 pb-4 sm:px-3 lg:px-3 xl:px-4 flex flex-col gap-3 sm:gap-4 lg:gap-4 xl:gap-6">
-      {articles.map((article, idx) => {
+      {results.map((article, idx) => {
         const displayContent = getContentForArticle(
           article.text,
-          isSubscribed,
+          !isSubscribed,
           article.isPremium || false
         );
 
@@ -40,7 +45,7 @@ export const SideArticles = ({ articles, isSubscribed }: SideArticlesProps) => {
                   height={150}
                   className="w-full h-full object-cover absolute inset-0"
                   isPremium={article.isPremium}
-                  isSubscribed={isSubscribed}
+                  isSubscribed={!isSubscribed}
                 />
               </div>
               <div className="flex-1 flex flex-col justify-center">

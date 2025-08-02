@@ -8,19 +8,19 @@ import { HeaderNavigation } from "../HeaderNavigation";
 import { HeaderTop } from "../HeaderTop";
 
 export default function Header() {
-  const allTags = useQuery(api.news.getAllTags);
+  const allTopics = useQuery(api.news.getAllTopics);
 
   // Memoize navigation items to prevent unnecessary re-renders
   const navigationItems = useMemo(
     () => [
       { label: "LATEST", href: "#" },
       { label: "FEATURED", href: "#" },
-      ...(allTags?.slice(0, 10) || []).map((tag) => ({
-        label: tag.toUpperCase(),
-        href: `#${tag}`,
+      ...(allTopics?.slice(0, 10) || []).map((topic) => ({
+        label: topic.toUpperCase(),
+        href: `#${topic}`,
       })),
     ],
-    [allTags]
+    [allTopics]
   );
 
   // Memoize the current date to prevent unnecessary re-renders

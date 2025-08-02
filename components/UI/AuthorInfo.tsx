@@ -7,7 +7,6 @@ interface AuthorInfoProps {
 }
 
 export const AuthorInfo = ({
-  source = "News Source",
   publishedAt,
   authorImage = "/image.png",
 }: AuthorInfoProps) => {
@@ -23,9 +22,9 @@ export const AuthorInfo = ({
         />
       </div>
       <div className="flex flex-col">
-        <span className="text-lg lg:text-lg font-semibold text-black">
+        {/* <span className="text-lg lg:text-lg font-semibold text-black">
           {source}
-        </span>
+        </span> */}
         <span className="text-base lg:text-base font-semibold text-neutral-500">
           {new Date(publishedAt).toLocaleDateString()}
         </span>

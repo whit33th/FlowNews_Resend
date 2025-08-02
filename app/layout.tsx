@@ -3,6 +3,7 @@ import { Yrsa } from "next/font/google";
 import "./globals.css";
 import { Convex } from "../components/layouts/ContextProvider/ConvexPovider";
 import Header from "@/components/Containers/Header/Header";
+import { Toaster } from "sonner";
 
 const yrsa = Yrsa({
   variable: "--font-yrsa",
@@ -11,7 +12,7 @@ const yrsa = Yrsa({
 });
 
 export const metadata: Metadata = {
-  title: "NewsFlow - Personalized News Feed",
+  title: "FlowNews - Personalized News Feed",
   description: "Get personalized news feeds based on your interests",
 };
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Header />
           <main className="flex-1  ">{children}</main>
         </Convex>
+        <Toaster richColors />
       </body>
     </html>
   );
