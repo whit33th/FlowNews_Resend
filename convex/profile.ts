@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getUser } from "./helpers/shared";
 import { Id } from "./_generated/dataModel";
+import { internal } from "./_generated/api";
 
 export const getUserReadingHistory = query({
   args: {
@@ -13,15 +14,24 @@ export const getUserReadingHistory = query({
 
     const limit = args.limit || 10;
 
-    const history = await ctx.db
+    const allHistory = await ctx.db
       .query("readingHistory")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .order("desc")
-      .take(limit);
+      .collect();
+
+    const uniqueArticles = new Map<string, any>();
+    for (const record of allHistory) {
+      if (!uniqueArticles.has(record.newsId)) {
+        uniqueArticles.set(record.newsId, record);
+      }
+    }
+
+    const uniqueHistory = Array.from(uniqueArticles.values()).slice(0, limit);
 
     const historyWithNews = await Promise.all(
-      history.map(async (record) => {
-        const news = await ctx.db.get(record.newsId);
+      uniqueHistory.map(async (record) => {
+        const news = await ctx.db.get(record.newsId as Id<"news">);
         if (!news) return null;
 
         let imageUrl = null;
@@ -171,7 +181,6 @@ export const getUserAchievements = query({
   },
 });
 
-// Добавление статьи в историю чтения
 export const addToReadingHistory = mutation({
   args: {
     newsId: v.id("news"),
@@ -251,10 +260,68 @@ async function checkAndUpdateAchievements(
   articlesRead: number,
   dayStreak: number
 ) {
+  const user = await ctx.db.get(userId);
+  if (!user || !user.email) return;
+
+  const readingHistory = await ctx.db
+    .query("readingHistory")
+    .withIndex("by_user", (q: any) => q.eq("userId", userId))
+    .collect();
+
+  const today = new Date().toISOString().split("T")[0];
+  const todayReads = readingHistory.filter((record: any) => {
+    const readDate = new Date(record.readAt).toISOString().split("T")[0];
+    return readDate === today;
+  }).length;
+
   const achievements = [
-    { id: "first-read", condition: articlesRead >= 1 },
-    { id: "news-junkie", condition: articlesRead >= 50 },
-    { id: "daily-reader", condition: dayStreak >= 7 },
+    {
+      id: "first-read",
+      condition: articlesRead >= 1,
+      title: "First Reader",
+      description:
+        "You've read your first article! Welcome to the world of informed reading.",
+      icon: "📚",
+    },
+    {
+      id: "topic-explorer",
+      condition: (user.topics?.length || 0) >= 3,
+      title: "Topic Explorer",
+      description:
+        "You're following 3 different topics! Your interests are expanding.",
+      icon: "🎯",
+    },
+    {
+      id: "daily-reader",
+      condition: dayStreak >= 7,
+      title: "Daily Reader",
+      description:
+        "Amazing consistency! You've read articles for 7 consecutive days.",
+      icon: "🔥",
+    },
+    {
+      id: "news-junkie",
+      condition: articlesRead >= 50,
+      title: "News Junkie",
+      description:
+        "Impressive! You've read 50 articles. You're becoming a true news enthusiast!",
+      icon: "📰",
+    },
+    {
+      id: "speed-reader",
+      condition: todayReads >= 5,
+      title: "Speed Reader",
+      description: "Wow! You've read 5 articles in one day. You're on fire!",
+      icon: "⚡",
+    },
+    {
+      id: "diverse-reader",
+      condition: (user.topics?.length || 0) >= 5,
+      title: "Diverse Reader",
+      description:
+        "You're following articles from all major topics! True diversity in reading.",
+      icon: "🌟",
+    },
   ];
 
   for (const achievement of achievements) {
@@ -272,6 +339,58 @@ async function checkAndUpdateAchievements(
           achievementId: achievement.id,
           unlockedAt: Date.now(),
         });
+
+        const readingHistory = await ctx.db
+          .query("readingHistory")
+          .withIndex("by_user", (q: any) => q.eq("userId", userId))
+          .take(20); 
+
+        const topicCounts: Record<string, number> = {};
+        for (const record of readingHistory) {
+          const news = await ctx.db.get(record.newsId);
+          if (news) {
+            for (const topic of news.topics) {
+              topicCounts[topic] = (topicCounts[topic] || 0) + 1;
+            }
+          }
+        }
+
+        const favoriteTopic =
+          Object.entries(topicCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ||
+          "technology";
+
+        try {
+          await ctx.scheduler.runAfter(
+            0,
+            internal.sendEmails.sendAchievementUnlock,
+            {
+              userEmail: user.email,
+              userName: user.name || "Dear Reader",
+              userId: userId,
+              achievement: {
+                id: achievement.id,
+                title: achievement.title,
+                description: achievement.description,
+                icon: achievement.icon,
+                progress: 100,
+              },
+              userStats: {
+                articlesRead: articlesRead,
+                dayStreak: dayStreak,
+                favoriteTopic: favoriteTopic,
+              },
+            }
+          );
+
+          console.log(
+            `Achievement email sent to ${user.email} for achievement: ${achievement.title}`
+          );
+        } catch (error) {
+          console.error(
+            `Failed to send achievement email for ${achievement.id}:`,
+            error
+          );
+        }
       }
     }
   }

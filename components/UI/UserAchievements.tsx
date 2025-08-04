@@ -3,41 +3,13 @@
 import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import { Trophy, Star, Award, Target, Zap, BookOpen } from "lucide-react";
+import { UserAchievementsSkeleton } from "./SkeletonComponents";
 
 export const UserAchievements = () => {
   const achievements = useQuery(api.profile.getUserAchievements);
 
   if (!achievements) {
-    return (
-      <div className="bg-white border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-black flex items-center gap-2">
-              <Trophy className="w-5 h-5" />
-              Achievements
-            </h3>
-            <div className="text-sm text-neutral-600">Loading...</div>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="animate-pulse">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="p-4 border border-gray-200">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-gray-200 rounded"></div>
-                    <div className="flex-1">
-                      <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                      <div className="h-3 bg-gray-200 rounded"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <UserAchievementsSkeleton />;
   }
 
   const getAchievementIcon = (id: string) => {

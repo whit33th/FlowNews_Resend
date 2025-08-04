@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { memo } from "react";
 import { api } from "../../convex/_generated/api";
+import { ArticleImage } from "../UI/ArticleImage";
+import { UserNewsFeedSkeleton } from "../UI/SkeletonComponents";
 
 interface UserNewsFeedProps {
   userTopics: string[];
@@ -15,8 +17,13 @@ export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
   const personalizedNews = useQuery(api.news.getPersonalizedNews, {
     userTopics: userTopics.length > 0 ? userTopics : undefined,
   });
+  const isSubscribed = useQuery(api.subscribers.getSubscriber);
 
-  if (!personalizedNews || personalizedNews.length === 0) {
+  if (!personalizedNews) {
+    return <UserNewsFeedSkeleton />;
+  }
+
+  if (personalizedNews.length === 0) {
     return (
       <div className="bg-white border border-gray-200">
         <div className="p-6 border-b border-gray-200">
@@ -56,17 +63,17 @@ export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
               className="group block"
             >
               <div className="border border-gray-200 overflow-hidden hover:bg-gray-50 transition-colors">
-                {news.image && (
-                  <div className="aspect-video bg-gray-100 overflow-hidden">
-                    <Image
-                      src={news.image}
-                      alt={news.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                )}
+                <div className="aspect-video bg-gray-100 overflow-hidden">
+                  <ArticleImage
+                    src={news.image ?? "/image.png"}
+                    alt={news.title}
+                    width={400}
+                    height={225}
+                    className="w-full h-full"
+                    isPremium={news.isPremium}
+                    isSubscribed={isSubscribed}
+                  />
+                </div>
 
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">

@@ -2,12 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --secondary: #6b7280;
-  --secondary-hover: #4b5563;
-}
+/* Кастомные стили для скелетонов */
 
 body {
   font-family: var(--font-yrsa);
@@ -35,17 +30,6 @@ body {
   @apply flex items-center;
 }
 
-/* Line clamp utilities */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+* {
+  scrollbar-width: none;
 }

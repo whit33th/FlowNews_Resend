@@ -9,7 +9,7 @@ import Image from "next/image";
 
 interface ImageUploadProps {
   currentImage?: string;
-  onImageUpdate: (imageUrl: string) => void;
+  onImageUpdate: (storageId: string) => void;
   size?: "small" | "medium" | "large";
   isEditing?: boolean;
   resetTrigger?: number;
@@ -103,7 +103,7 @@ export const ImageUpload = ({
       <div
         className={`${
           sizeClasses[size]
-        } bg-gray-100 flex items-center justify-center  border *:rounded-full border-gray-300 rounded-full relative transition-all duration-200 ${
+        } bg-gray-100 flex items-center justify-center  border  border-gray-300 rounded-full relative transition-all duration-200 ${
           isEditing ? "cursor-pointer group-hover:border-gray-400" : ""
         }`}
         onClick={isEditing ? () => fileInputRef.current?.click() : undefined}
@@ -114,15 +114,15 @@ export const ImageUpload = ({
               src={displayImage}
               alt="Profile"
               className="w-full h-full group-hover:animate-pulse object-cover rounded-full transition-transform invert duration-200 group-hover:scale-110"
-              width={100}
-              height={100}
+              width={200}
+              height={200}
             />
             <Image
               src={displayImage}
               alt="Profile"
               className="w-full absolute  inset-0 h-full rounded-full object-cover transition-transform duration-200 "
-              width={100}
-              height={100}
+              width={200}
+              height={200}
               priority
             />
           </div>
@@ -139,7 +139,7 @@ export const ImageUpload = ({
         )}
 
         {isEditing && (
-          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center rounded-full">
             <Upload className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
           </div>
         )}

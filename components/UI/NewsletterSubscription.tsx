@@ -40,8 +40,8 @@ export const NewsletterSubscription = () => {
   }
 
   return (
-    <div className="border-t border-gray-200 p-2 sm:p-3 lg:p-3 xl:p-4">
-      <div className="flex flex-col gap-2 sm:gap-3 lg:gap-3 xl:gap-4">
+    <div className="p-2 sm:p-3 lg:p-3 xl:p-4">
+      <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <Mail className="w-4 sm:w-5 lg:w-4 xl:w-5 h-4 sm:h-5 lg:h-4 xl:h-5 text-neutral-600" />
           <h3 className="text-base sm:text-lg lg:text-base xl:text-lg font-bold text-black">

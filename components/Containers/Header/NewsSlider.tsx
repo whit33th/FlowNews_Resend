@@ -7,6 +7,7 @@ import { Autoplay } from "swiper/modules";
 import Link from "next/link";
 import { memo } from "react";
 import "swiper/css";
+import { NewsSliderSkeleton } from "../../UI/SkeletonComponents";
 
 export const NewsSlider = memo(() => {
   const latestNews = usePaginatedQuery(
@@ -20,13 +21,7 @@ export const NewsSlider = memo(() => {
   );
 
   if (!latestNews || latestNews.results.length === 0) {
-    return (
-      <div className="flex justify-center">
-        <span className="text-xs lg:text-sm font-semibold text-black">
-          Loading latest news...
-        </span>
-      </div>
-    );
+    return <NewsSliderSkeleton />;
   }
 
   return (

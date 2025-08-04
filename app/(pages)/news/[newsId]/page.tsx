@@ -2,21 +2,22 @@
 
 import { useQuery } from "convex-helpers/react/cache";
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import { useParams } from "next/navigation";
+import { api } from "@/convex/_generated/api";
+
 import Image from "next/image";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
-import { getContentForArticle } from "../../../helpers/loremIpsum";
+import { getContentForArticle } from "@/helpers/loremIpsum";
 import { useEffect, useRef } from "react";
 import { Id } from "@/convex/_generated/dataModel";
+import StarRating from "@/components/UI/StarRating";
+import { useParams } from "next/navigation";
 
 export default function NewsArticlePage() {
   const params = useParams();
   const newsId = params.newsId as string;
   const hasIncrementedViews = useRef(false);
   const hasAddedToHistory = useRef(false);
-  // const [readingStartTime] = useState(Date.now());
 
   const article = useQuery(api.news.getNewsById, { id: newsId as Id<"news"> });
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
@@ -48,15 +49,17 @@ export default function NewsArticlePage() {
 
   if (article === undefined) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+      <div className="flex justify-center items-center  p-4 h-96 ">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-black mb-4">Loading...</h1>
+        </div>
       </div>
     );
   }
 
   if (!article) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center h-full p-4 ">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-black mb-4">
             Article Not Found
@@ -87,16 +90,6 @@ export default function NewsArticlePage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 lg:p-8">
-      <div className="mb-6">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-neutral-600 hover:text-black transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to News
-        </Link>
-      </div>
-
       <div className="mb-8">
         <h1 className="text-3xl lg:text-4xl font-bold text-black mb-4 leading-tight">
           {article.title}
@@ -117,6 +110,18 @@ export default function NewsArticlePage() {
             <span className="font-semibold">{article.views}</span>
             <span>views</span>
           </div>
+          {article.averageRating !== undefined && (
+            <div className="flex items-center gap-2">
+              <StarRating
+                rating={article.averageRating}
+                size="sm"
+                showValue={true}
+              />
+              <span className="text-xs text-neutral-500">
+                ({article.totalRatings || 0} ratings)
+              </span>
+            </div>
+          )}
         </div>
 
         {article.topics && article.topics.length > 0 && (
@@ -151,21 +156,24 @@ export default function NewsArticlePage() {
       </div>
 
       <div className="mb-8">
-        <div className="w-full h-64 lg:h-96 relative">
-          <Image
-            src="/image.png"
-            alt={article.title}
-            fill
-            className={`object-cover grayscale ${
-              showPremiumBlur ? "blur-sm" : ""
-            }`}
-          />
-          {showPremiumBlur && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <span className="text-white text-2xl font-bold">PREMIUM</span>
-            </div>
-          )}
-        </div>
+        {}
+        {article.image && (
+          <div className="w-full h-64 lg:h-96 relative">
+            <Image
+              src={article.image}
+              alt={article.title}
+              fill
+              className={`object-cover grayscale  ${
+                showPremiumBlur ? "blur-sm" : ""
+              }`}
+            />
+            {showPremiumBlur && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+                <span className="text-white text-2xl font-bold">PREMIUM</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="prose prose-lg max-w-none">

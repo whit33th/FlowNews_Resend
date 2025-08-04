@@ -4,6 +4,7 @@ import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import Link from "next/link";
 import { Clock, Eye, Calendar, BookOpen } from "lucide-react";
+import { ReadingHistorySkeleton } from "./SkeletonComponents";
 
 export const ReadingHistory = () => {
   const readingHistory = useQuery(api.profile.getUserReadingHistory, {
@@ -29,34 +30,7 @@ export const ReadingHistory = () => {
   };
 
   if (!readingHistory || !userStats || !topTopics) {
-    return (
-      <div className="bg-white border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-black flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              Recent Reading History
-            </h3>
-            <div className="text-sm text-neutral-600">Loading...</div>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="animate-pulse space-y-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="p-4 border border-gray-200">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded mb-2 w-1/3"></div>
-                    <div className="h-5 bg-gray-200 rounded mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <ReadingHistorySkeleton />;
   }
 
   return (
@@ -83,6 +57,7 @@ export const ReadingHistory = () => {
         ) : (
           <div className="space-y-4">
             {readingHistory
+              .slice(0, 10)
               .filter((record) => record !== null)
               .map((record) => (
                 <Link

@@ -4,7 +4,7 @@ import "./globals.css";
 import { Convex } from "../components/layouts/ContextProvider/ConvexPovider";
 import Header from "@/components/Containers/Header/Header";
 import { Toaster } from "sonner";
-
+import ApperanceEffect from "@/components/layouts/ApperanceEffect";
 
 const yrsa = Yrsa({
   variable: "--font-yrsa",
@@ -29,7 +29,10 @@ export default function RootLayout({
       >
         <Convex>
           <Header />
-          <main className="flex-1">{children}</main>
+
+          <main className="flex-1">
+            <ApperanceEffect>{children}</ApperanceEffect>
+          </main>
         </Convex>
         <Toaster richColors />
       </body>

@@ -1,5 +1,5 @@
 import { ConvexError } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalQuery } from "./_generated/server";
 import { getUser } from "./helpers/shared";
 import schema from "./schema";
 
@@ -29,5 +29,27 @@ export const getSubscriber = query({
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .unique();
     return !!subscriber;
+  },
+});
+
+export const getAllSubscribers = internalQuery({
+  handler: async (ctx) => {
+    const subscribers = await ctx.db.query("subscribers").collect();
+
+    const subscribersWithUserData = await Promise.all(
+      subscribers.map(async (subscriber) => {
+        let userName = "Dear Reader";
+        if (subscriber.userId) {
+          const user = await ctx.db.get(subscriber.userId);
+          userName = user?.name || "Dear Reader";
+        }
+        return {
+          ...subscriber,
+          userName,
+        };
+      })
+    );
+
+    return subscribersWithUserData;
   },
 });

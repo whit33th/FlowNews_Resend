@@ -3,6 +3,7 @@
 import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import { BookOpen, Calendar, TrendingUp } from "lucide-react";
+import { UserStatsSkeleton } from "./SkeletonComponents";
 
 interface UserStatsProps {
   userTopics: string[];
@@ -12,32 +13,7 @@ export const UserStats = ({}: UserStatsProps) => {
   const userStats = useQuery(api.profile.getUserStats);
 
   if (!userStats) {
-    return (
-      <div className="bg-white border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-xl font-bold text-black flex items-center gap-2">
-            <TrendingUp className="w-5 h-5" />
-            Reading Statistics
-          </h3>
-        </div>
-        <div className="p-6">
-          <div className="animate-pulse">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="text-center p-4 bg-gray-50 border border-gray-200"
-                >
-                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-8 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <UserStatsSkeleton />;
   }
 
   return (

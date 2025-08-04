@@ -8,6 +8,7 @@ import { getContentForArticle } from "../../helpers/loremIpsum";
 import { ArticleImage } from "../UI/ArticleImage";
 import { AuthorInfo } from "../UI/AuthorInfo";
 import { NavigationButtons } from "../UI/NavigationButtons";
+import { MainArticleSkeleton } from "../UI/SkeletonComponents";
 
 export const MainArticle = () => {
   const { results, loadMore, status, isLoading } = useStablePaginatedQuery(
@@ -38,13 +39,7 @@ export const MainArticle = () => {
   }
 
   if (isLoading || !results || results.length === 0) {
-    return (
-      <div className="flex-1 flex flex-col h-full p-3 lg:p-4 border-x border-gray-200">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-gray-500">Loading...</div>
-        </div>
-      </div>
-    );
+    return <MainArticleSkeleton />;
   }
 
   const currentPage = Math.min(page, results.length - 1);

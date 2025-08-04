@@ -1,24 +1,23 @@
 "use client";
 
+import { api } from "@/convex/_generated/api";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex-helpers/react/cache";
-
-import { useState } from "react";
-import { toast } from "sonner";
-import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
-import { api } from "../../convex/_generated/api";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const { signIn } = useAuthActions();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const loggedInUser = useQuery(api.auth.loggedInUser);
@@ -43,24 +42,31 @@ export default function SignInPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const formDataObj = new FormData();
       formDataObj.set("email", formData.email);
       formDataObj.set("password", formData.password);
-      formDataObj.set("flow", "signIn");
+      formDataObj.set("flow", "signUp");
 
       await signIn("password", formDataObj);
-      toast.success("Welcome back!");
+      toast.success("Account created successfully!");
     } catch (error) {
-      let toastTitle = "Failed to sign in";
-      if (error instanceof Error) {
-        if (error.message.includes("Invalid password")) {
-          toastTitle = "Invalid email or password. Please try again.";
-        } else if (error.message.includes("not found")) {
-          toastTitle = "Account not found. Please sign up instead.";
-        }
+      let toastTitle = "Failed to create account";
+      if (error instanceof Error && error.message.includes("already exists")) {
+        toastTitle = "Account already exists. Please sign in instead.";
       }
       toast.error(toastTitle);
     } finally {
@@ -78,55 +84,36 @@ export default function SignInPage() {
         <div className="flex-1 flex flex-col gap-6 p-6 lg:p-8">
           <div className="text-center lg:text-left">
             <h1 className="text-4xl lg:text-5xl font-bold text-black mb-4">
-              WELCOME BACK
+              JOIN THE CHRONICLE
             </h1>
             <p className="text-xl lg:text-2xl font-semibold text-neutral-600 leading-relaxed">
-              Continue your journey with personalized news
+              Become part of our community of informed readers
             </p>
           </div>
 
           <div className="flex-1 flex flex-col gap-6">
             <div className="border-l-4 border-black pl-6">
               <h3 className="text-lg lg:text-xl font-bold text-black mb-3">
-                Your Personalized Feed
-              </h3>
-              <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
-                Pick up right where you left off with your curated news feed,
-                tailored to your interests and reading preferences.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-black pl-6">
-              <h3 className="text-lg lg:text-xl font-bold text-black mb-3">
-                Reading Analytics
+                Exclusive Benefits
               </h3>
               <ul className="space-y-2 text-base lg:text-lg text-neutral-600">
-                <li>• Track your reading history and preferences</li>
-                <li>• Discover new topics based on your interests</li>
-                <li>• Save articles for later reading</li>
-                <li>• Get recommendations from our AI</li>
+                <li>• Personalized news feed based on your interests</li>
+                <li>• Daily digest delivered to your inbox</li>
+                <li>• Access to premium articles and exclusive text</li>
+                <li>• Join discussions with fellow readers</li>
               </ul>
             </div>
 
             <div className="border-l-4 border-black pl-6">
               <h3 className="text-lg lg:text-xl font-bold text-black mb-3">
-                Stay Updated
+                Stay Informed
               </h3>
               <p className="text-base lg:text-lg text-neutral-600 leading-relaxed">
-                Never miss important news with our smart notifications and daily
-                digest emails.
+                Get breaking news, in-depth analysis, and stories that matter to
+                you. Our AI-powered system learns your preferences to deliver
+                the most relevant text.
               </p>
             </div>
-          </div>
-
-          <div className="text-center lg:text-left">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-base lg:text-lg font-semibold text-neutral-600 hover:text-black transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Home
-            </Link>
           </div>
         </div>
       </div>
@@ -136,14 +123,31 @@ export default function SignInPage() {
           <div className="max-w-md mx-auto w-full">
             <div className="text-center mb-8">
               <h2 className="text-3xl lg:text-4xl font-bold text-black mb-2">
-                Sign In
+                Create Account
               </h2>
               <p className="text-lg text-neutral-600">
-                Access your personalized news dashboard
+                Start your journey with personalized news
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-neutral-700">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-base font-semibold"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-neutral-700">
                   Email Address
@@ -168,36 +172,35 @@ export default function SignInPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type="password"
                     value={formData.password}
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
                     }
-                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-base font-semibold"
-                    placeholder="Enter your password"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-base font-semibold"
+                    placeholder="Create a password"
                     required
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
                 </div>
               </div>
 
-              <div className="text-right">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-neutral-600 hover:text-black font-semibold"
-                >
-                  Forgot your password?
-                </Link>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-neutral-700">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                  <input
+                    type="password"
+                    value={formData.confirmPassword}
+                    onChange={(e) =>
+                      handleInputChange("confirmPassword", e.target.value)
+                    }
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-base font-semibold"
+                    placeholder="Confirm your password"
+                    required
+                  />
+                </div>
               </div>
 
               <button
@@ -205,17 +208,17 @@ export default function SignInPage() {
                 disabled={submitting}
                 className="w-full px-6 py-4 bg-black text-white text-lg font-bold rounded-lg hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"
               >
-                {submitting ? "Signing In..." : "Sign In"}
+                {submitting ? "Creating Account..." : "Create Account"}
               </button>
 
               <div className="text-center">
                 <p className="text-base text-neutral-600">
-                  Don&apos;t have an account?{" "}
+                  Already have an account?{" "}
                   <Link
-                    href="/signup"
+                    href="/signin"
                     className="text-black font-semibold hover:underline"
                   >
-                    Sign up here
+                    Sign in here
                   </Link>
                 </p>
               </div>

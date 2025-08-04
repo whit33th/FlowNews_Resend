@@ -21,7 +21,6 @@ export const ArticleImage = ({
   isPremium,
   isSubscribed,
   premiumLabel = "PREMIUM",
-
 }: ArticleImageProps) => {
   const shouldBlur = !isSubscribed && isPremium;
 
@@ -33,6 +32,7 @@ export const ArticleImage = ({
         width={width}
         height={height}
         className={`object-cover object-center w-full h-full grayscale shadow-md  `}
+        loading="eager"
       />
       {shouldBlur && (
         <div className="absolute inset-0 flex items-center backdrop-blur-sm justify-center bg-black bg-opacity-50">

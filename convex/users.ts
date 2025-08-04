@@ -1,7 +1,23 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalQuery } from "./_generated/server";
 import { getUser } from "./helpers/shared";
 import schema from "./schema";
+
+export const getAllUsers = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("users").collect();
+  },
+});
+
+export const getUserById = internalQuery({
+  args: {
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.userId);
+  },
+});
 
 export const patchUser = mutation({
   args: schema.tables.users.validator,
@@ -51,10 +67,8 @@ export const updateUserImage = mutation({
     const user = await getUser(ctx);
     if (!user) throw new Error("Not authenticated");
 
-    // Получаем URL изображения
     const imageUrl = await ctx.storage.getUrl(storageId);
 
-    // Обновляем пользователя с новым изображением
     await ctx.db.patch(user._id, {
       image: imageUrl || undefined,
     });

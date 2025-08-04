@@ -1,20 +1,20 @@
 import Link from "next/link";
 
-import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex-helpers/react/cache";
+import { ArticleListSkeleton } from "../../UI/SkeletonComponents";
 
 export const ArticleList = () => {
-  const { results } = usePaginatedQuery(
-    api.news.getAllNewsPaginated,
-    { order: "desc" },
-    {
-      initialNumItems: 10,
-    }
-  );
+  const premiumNews = useQuery(api.news.getPremiumNews, { limit: 15 });
+
+  if (!premiumNews) {
+    return <ArticleListSkeleton />;
+  }
+
   return (
-    <div className="flex-1 px-2 sm:px-3 lg:px-3 xl:px-4">
+    <div className="flex-1 px-2 sm:px-3 lg:px-3 xl:px-4 lg:overflow-y-auto">
       <ol className="flex flex-col gap-2 sm:gap-3 lg:gap-3 xl:gap-4 ">
-        {results.map((article, idx) => {
+        {premiumNews?.map((article, idx) => {
           return (
             <li
               key={idx}

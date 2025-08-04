@@ -31,5 +31,5 @@ export const getContentForArticle = (
   if (isSubscribed || !isPremium) {
     return realContent;
   }
-  return generateLoremIpsum(4); // Generate 4 paragraphs for premium content
+  return generateLoremIpsum(4);
 };
