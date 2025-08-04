@@ -7,6 +7,10 @@ import { NewsletterSubscription } from "./NewsletterSubscription";
 export const SubscriptionBanner = () => {
   const isSubscribed = useQuery(api.subscribers.getSubscriber);
 
+  if (isSubscribed === undefined) {
+    return null;
+  }
+
   return (
     <div className="p-3 sm:p-4 bg-blue-200 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
       <div className="flex flex-col">
