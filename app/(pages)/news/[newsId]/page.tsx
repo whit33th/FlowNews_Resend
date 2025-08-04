@@ -148,18 +148,18 @@ export default function NewsArticlePage() {
         </div>
 
         {showPremiumBlur && (
-          <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6">
+          <div className="bg-black p-4  mb-6">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-red-600 font-bold">PREMIUM CONTENT</span>
+              <span className="text-white font-bold">PREMIUM CONTENT</span>
             </div>
-            <p className="text-red-700 mb-3">
-              This is premium text. Please sign in to read the full article.
+            <p className="text-gray-300 mb-3">
+              This is premium content. Please sign in to read the full article.
             </p>
             <Link
               href="/signin"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors"
             >
-              Sign In to Read
+              Subscribe to Read
             </Link>
           </div>
         )}
