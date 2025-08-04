@@ -30,6 +30,7 @@ interface AchievementUnlockEmailProps {
   userEmail: string;
   achievement: Achievement;
   userStats?: UserStats;
+  baseUrl?: string;
 }
 
 export const AchievementUnlockEmail = ({
@@ -37,6 +38,7 @@ export const AchievementUnlockEmail = ({
   userEmail,
   achievement,
   userStats,
+  baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 }: AchievementUnlockEmailProps) => {
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -529,7 +531,7 @@ export const AchievementUnlockEmail = ({
                   progress.
                 </Text>
                 <Button
-                  href="https://yournewssite.com/profile"
+                  href={`${baseUrl}/profile`}
                   className="bg-black text-white px-6 py-3 font-bold uppercase text-sm border-2 border-black"
                   style={{
                     lineHeight: "100%",
@@ -595,7 +597,9 @@ export const AchievementUnlockEmail = ({
             </Link>
           </Text>
           <Link
-            href={`mailto:unsubscribe@yournewssite.com?subject=Unsubscribe ${userEmail}`}
+            href={`mailto:unsubscribe@${
+              new URL(baseUrl).hostname
+            }?subject=Unsubscribe ${userEmail}`}
             className="text-xs underline uppercase"
             style={{
               color: "#cccccc",

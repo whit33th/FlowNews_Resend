@@ -16,6 +16,7 @@ interface PostCreatedEmailProps {
   authorEmail: string;
   newsTitle: string;
   newsId: string;
+  baseUrl?: string;
 }
 
 export const PostCreatedEmail = ({
@@ -23,6 +24,7 @@ export const PostCreatedEmail = ({
   authorEmail,
   newsTitle,
   newsId,
+  baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 }: PostCreatedEmailProps) => {
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -97,9 +99,7 @@ export const PostCreatedEmail = ({
           {}
           <Section className="text-center my-8">
             <Button
-              href={`${
-                process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-              }/news/${newsId}`}
+              href={`${baseUrl}/news/${newsId}`}
               className="bg-black text-white px-8 py-4 rounded font-semibold text-lg no-underline inline-block"
             >
               View Your Article
@@ -135,9 +135,7 @@ export const PostCreatedEmail = ({
           </Text>
 
           <Link
-            href={`${
-              process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-            }/profile`}
+            href={`${baseUrl}/profile`}
             className="text-xs text-neutral-600 underline"
           >
             Manage your account

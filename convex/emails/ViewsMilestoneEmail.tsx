@@ -17,6 +17,7 @@ interface ViewsMilestoneEmailProps {
   newsTitle: string;
   newsId: string;
   views: number;
+  baseUrl?: string;
 }
 
 export const ViewsMilestoneEmail = ({
@@ -25,6 +26,7 @@ export const ViewsMilestoneEmail = ({
   newsTitle,
   newsId,
   views,
+  baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 }: ViewsMilestoneEmailProps) => {
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -114,9 +116,7 @@ export const ViewsMilestoneEmail = ({
           {}
           <Section className="text-center my-8">
             <Button
-              href={`${
-                process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-              }/news/${newsId}`}
+              href={`${baseUrl}/news/${newsId}`}
               className="bg-black text-white px-8 py-4 rounded font-semibold text-lg no-underline inline-block"
             >
               View Article Analytics
@@ -167,9 +167,7 @@ export const ViewsMilestoneEmail = ({
           </Text>
 
           <Link
-            href={`${
-              process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-            }/profile`}
+            href={`${baseUrl}/profile`}
             className="text-xs text-neutral-600 underline"
           >
             View your profile

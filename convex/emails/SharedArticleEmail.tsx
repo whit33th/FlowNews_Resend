@@ -34,6 +34,7 @@ interface SharedArticleEmailProps {
   sharedByUser: string;
   sharedByEmail?: string;
   newsItem: NewsItem;
+  baseUrl?: string;
 }
 
 export const SharedArticleEmail = ({
@@ -41,6 +42,7 @@ export const SharedArticleEmail = ({
   sharedByUser,
   sharedByEmail,
   newsItem,
+  baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 }: SharedArticleEmailProps) => {
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -63,9 +65,7 @@ export const SharedArticleEmail = ({
       ? newsItem.text.substring(0, 600) + "..."
       : newsItem.text;
 
-  const articleUrl = `${
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-  }/news/${newsItem._id}`;
+  const articleUrl = `${baseUrl}/news/${newsItem._id}`;
 
   return (
     <Html>
@@ -490,9 +490,7 @@ export const SharedArticleEmail = ({
                   {currentDate.toUpperCase()}
                   <br />
                   <Link
-                    href={`${
-                      process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-                    }`}
+                    href={baseUrl}
                     className="text-newspaper-lightGray"
                     style={{
                       color: "#cccccc",

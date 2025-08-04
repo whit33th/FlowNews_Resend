@@ -26,12 +26,14 @@ interface WeeklyDigestEmailProps {
   userName?: string;
   userEmail: string;
   newsItems: NewsItem[];
+  baseUrl?: string;
 }
 
 export const WeeklyDigestEmail = ({
   userName = "Dear Reader",
   userEmail,
   newsItems,
+  baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 }: WeeklyDigestEmailProps) => {
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -384,7 +386,7 @@ export const WeeklyDigestEmail = ({
                 }}
               >
                 <Button
-                  href={`https://yournewssite.com/article/${news._id}`}
+                  href={`${baseUrl}/news/${news._id}`}
                   className="bg-black text-white px-6 py-3 font-bold uppercase text-sm border-2 border-black"
                   style={{
                     lineHeight: "100%",
@@ -554,7 +556,9 @@ export const WeeklyDigestEmail = ({
             Next Edition: {nextWeekDate}
           </Text>
           <Link
-            href={`mailto:unsubscribe@yournewssite.com?subject=Unsubscribe ${userEmail}`}
+            href={`mailto:unsubscribe@${
+              new URL(baseUrl).hostname
+            }?subject=Unsubscribe ${userEmail}`}
             className="text-xs underline uppercase"
             style={{
               color: "#cccccc",
