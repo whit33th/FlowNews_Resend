@@ -7,10 +7,10 @@ import { components, internal } from "./_generated/api";
 import { internalAction } from "./_generated/server";
 import { AchievementUnlockEmail } from "./emails/AchievementUnlock";
 import { NewArticleNotificationEmail } from "./emails/NewArticleNotification";
-import { WeeklyDigestEmail } from "./emails/WeeklyDigest";
 import { PostCreatedEmail } from "./emails/PostCreatedEmail";
-import { ViewsMilestoneEmail } from "./emails/ViewsMilestoneEmail";
 import { SharedArticleEmail } from "./emails/SharedArticleEmail";
+import { ViewsMilestoneEmail } from "./emails/ViewsMilestoneEmail";
+import { WeeklyDigestEmail } from "./emails/WeeklyDigest";
 
 export const resend: Resend = new Resend(components.resend, {
   testMode: false,

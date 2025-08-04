@@ -34,7 +34,7 @@ crons.weekly(
 
 crons.interval(
   "Check and send new article notifications",
-  { seconds: 30 },
+  { minutes: 30 },
   internal.emailJobs.checkAndSendNewArticleNotifications
 );
 
