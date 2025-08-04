@@ -138,6 +138,7 @@ export default function SignUpPage() {
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <input
+                    autoComplete="name"
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
@@ -155,6 +156,7 @@ export default function SignUpPage() {
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <input
+                    autoComplete="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
@@ -172,6 +174,7 @@ export default function SignUpPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <input
+                    autoComplete="current-password"
                     type="password"
                     value={formData.password}
                     onChange={(e) =>
@@ -191,6 +194,7 @@ export default function SignUpPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <input
+                    autoComplete="new-password"
                     type="password"
                     value={formData.confirmPassword}
                     onChange={(e) =>
