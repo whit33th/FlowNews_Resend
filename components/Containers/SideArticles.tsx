@@ -1,9 +1,9 @@
 import { api } from "@/convex/_generated/api";
 import { getContentForArticle } from "@/helpers/loremIpsum";
-import { useQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
 import Link from "next/link";
 import { ArticleImage } from "../UI/ArticleImage";
-import { SideArticleSkeleton } from "../UI/SkeletonComponents";
+import { SideArticleSkeleton } from "./Skeletons/SkeletonComponents";
 
 interface SideArticlesProps {
   excludeArticleId?: string;
@@ -21,7 +21,11 @@ export const SideArticles = ({ excludeArticleId }: SideArticlesProps) => {
   );
 
   if (!personalizedNews) {
-    return <SideArticleSkeleton />;
+    return (
+      <div className="w-full lg:flex-1 flex flex-col h-full min-w-0">
+        <SideArticleSkeleton />
+      </div>
+    );
   }
 
   const filteredNews = personalizedNews
@@ -30,14 +34,14 @@ export const SideArticles = ({ excludeArticleId }: SideArticlesProps) => {
 
   if (filteredNews.length === 0) {
     return (
-      <div className="flex-1 px-2 pb-4 sm:px-3 lg:px-3 xl:px-4 flex flex-col gap-3 text-center text-gray-500">
+      <div className="w-full lg:flex-1 flex flex-col h-full min-w-0 px-2 pb-4 sm:px-3 lg:px-3 xl:px-4 gap-3 text-center text-gray-500">
         <p>No suitable articles to display</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 px-2 pb-4 sm:px-3 lg:px-3 xl:px-4 flex flex-col gap-3 sm:gap-4 lg:gap-4 xl:gap-6 overflow-hidden">
+    <div className="w-full lg:flex-1 flex flex-col h-full min-w-0 px-2 pb-4 sm:px-3 lg:px-3 xl:px-4 gap-3 sm:gap-4 lg:gap-4 xl:gap-6 overflow-hidden">
       {filteredNews.map((article, idx) => {
         const displayContent = getContentForArticle(
           article.text,

@@ -3,7 +3,7 @@
 import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import { Trophy, Star, Award, Target, Zap, BookOpen } from "lucide-react";
-import { UserAchievementsSkeleton } from "./SkeletonComponents";
+import { UserAchievementsSkeleton } from "../Containers/Skeletons/SkeletonComponents";
 
 export const UserAchievements = () => {
   const achievements = useQuery(api.profile.getUserAchievements);

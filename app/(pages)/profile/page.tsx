@@ -1,15 +1,14 @@
 "use client";
 
+import { ProfileSkeleton } from "@/components/Containers/Skeletons/SkeletonComponents";
 import { UserNewsFeed } from "@/components/Containers/UserNewsFeed";
 import { ImageUpload } from "@/components/UI/ImageUpload";
 import { ReadingHistory } from "@/components/UI/ReadingHistory";
-import { ProfileSkeleton } from "@/components/UI/SkeletonComponents";
 import { UserAchievements } from "@/components/UI/UserAchievements";
 import { UserStats } from "@/components/UI/UserStats";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { topics } from "@/convex/schema";
-import { useAuthActions } from "@convex-dev/auth/react";
+import { SingleTopic, Topics, topics } from "@/convex/schema";
 import { useQuery } from "convex-helpers/react/cache";
 import { useMutation } from "convex/react";
 import {
@@ -27,10 +26,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
-  const { signOut } = useAuthActions();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [editingTopics, setEditingTopics] = useState<string[]>([]);
+  const [editingTopics, setEditingTopics] = useState<Topics[number][]>([]);
   const [editingBio, setEditingBio] = useState("");
   const [editingName, setEditingName] = useState("");
   const [editingImageStorageId, setEditingImageStorageId] = useState<
@@ -87,7 +85,7 @@ export default function ProfilePage() {
     }
   };
 
-  const handleAddTopic = (topic: string) => {
+  const handleAddTopic = (topic: SingleTopic) => {
     if (!editingTopics.includes(topic)) {
       setEditingTopics([...editingTopics, topic]);
     }
@@ -97,128 +95,115 @@ export default function ProfilePage() {
     setEditingTopics(editingTopics.filter((t) => t !== topic));
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {}
-        <div className="lg:col-span-1">
-          <div className="bg-white border border-gray-200">
-            {}
-            <div className="text-center p-6 border-b border-gray-200">
-              <div className="relative inline-block mb-6">
-                <ImageUpload
-                  currentImage={user.image}
-                  onImageUpdate={(storageId) => {
-                    setEditingImageStorageId(storageId);
-                  }}
-                  size="large"
-                  isEditing={isEditing}
-                  resetTrigger={resetImageTrigger}
-                />
-              </div>
+        <div className="lg:col-span-1 bg-white border border-gray-200">
+          <div className="text-center p-6 border-b border-gray-200">
+            <div className="relative inline-block mb-6">
+              <ImageUpload
+                currentImage={user.image}
+                onImageUpdate={(storageId) => {
+                  setEditingImageStorageId(storageId);
+                }}
+                size="large"
+                isEditing={isEditing}
+                resetTrigger={resetImageTrigger}
+              />
+            </div>
 
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={editingName}
-                  onChange={(e) => setEditingName(e.target.value)}
-                  className="text-3xl font-bold text-black text-center bg-transparent border-b-2 border-black focus:outline-none mb-2"
-                  placeholder="Enter your name"
-                />
-              ) : (
-                <h1 className="text-3xl font-bold text-black mb-2">
-                  {user.name || "User"}
-                </h1>
-              )}
+            {isEditing ? (
+              <input
+                type="text"
+                value={editingName}
+                onChange={(e) => setEditingName(e.target.value)}
+                className="text-3xl font-bold text-black text-center bg-transparent border-b-2 border-black focus:outline-none mb-2"
+                placeholder="Enter your name"
+              />
+            ) : (
+              <h1 className="text-3xl font-bold text-black mb-2">
+                {user.name || "User"}
+              </h1>
+            )}
 
-              <p className="text-neutral-600 font-semibold">
-                {user.email || "No email provided"}
+            <p className="text-neutral-600 font-semibold">
+              {user.email || "No email provided"}
+            </p>
+          </div>
+
+          <div className="p-6 border-b border-gray-200">
+            <h3 className="text-xl font-bold text-black mb-4 flex items-center gap-2">
+              <BookOpen className="w-5 h-5" />
+              About
+            </h3>
+            {isEditing ? (
+              <textarea
+                value={editingBio}
+                onChange={(e) => setEditingBio(e.target.value)}
+                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none resize-none"
+                rows={4}
+                placeholder="Tell us about yourself..."
+              />
+            ) : (
+              <p className="text-neutral-600 leading-relaxed">
+                {user.bio || "No bio provided. Click edit to add your story."}
               </p>
-            </div>
+            )}
+          </div>
 
-            {}
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-black mb-4 flex items-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                About
-              </h3>
-              {isEditing ? (
-                <textarea
-                  value={editingBio}
-                  onChange={(e) => setEditingBio(e.target.value)}
-                  className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none resize-none"
-                  rows={4}
-                  placeholder="Tell us about yourself..."
-                />
-              ) : (
-                <p className="text-neutral-600 leading-relaxed">
-                  {user.bio || "No bio provided. Click edit to add your story."}
-                </p>
-              )}
-            </div>
-
-            {}
-            <div className="grid grid-cols-2 gap-0 border-b border-gray-200">
-              <div className="text-center p-4 border-r border-gray-200">
-                <div className="text-3xl font-bold text-black">
-                  {user.topics?.length || 0}
-                </div>
-                <div className="text-sm text-neutral-600">Topics</div>
+          <div className="grid grid-cols-2 gap-0 border-b border-gray-200">
+            <div className="text-center p-4 border-r border-gray-200">
+              <div className="text-3xl font-bold text-black">
+                {user.topics?.length || 0}
               </div>
-              <div className="text-center p-4">
-                <div className="text-lg font-bold text-black">
-                  {user.isAnonymous ? "Guest" : "Member"}
-                </div>
-                <div className="text-sm text-neutral-600">Status</div>
-              </div>
+              <div className="text-sm text-neutral-600">Topics</div>
             </div>
+            <div className="text-center p-4">
+              <div className="text-lg font-bold text-black">
+                {user.isAnonymous ? "Guest" : "Member"}
+              </div>
+              <div className="text-sm text-neutral-600">Status</div>
+            </div>
+          </div>
 
-            {}
-            <div className="p-6">
-              {isEditing ? (
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleSaveProfile}
-                    type="submit"
-                    className="flex-1 px-6 py-3 bg-black text-white font-semibold hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <Save className="w-4 h-4" />
-                    Save
-                  </button>
-                  <button
-                    type="reset"
-                    onClick={() => {
-                      setIsEditing(false);
-                      setEditingTopics(user.topics || []);
-                      setEditingBio(user.bio || "");
-                      setEditingName(user.name || "");
-                      setEditingImageStorageId(null);
-                      setResetImageTrigger((prev) => prev + 1);
-                    }}
-                    className="px-6 py-3 bg-black text-white font-semibold hover:bg-neutral-800 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
+          <div className="p-6">
+            {isEditing ? (
+              <div className="flex gap-3">
                 <button
-                  onClick={() => setIsEditing(true)}
-                  className="w-full px-6 py-3 bg-black text-white font-semibold hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
+                  onClick={handleSaveProfile}
+                  type="submit"
+                  className="flex-1 px-6 py-3 bg-black text-white font-semibold hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
                 >
-                  <Edit3 className="w-4 h-4" />
-                  Edit Profile
+                  <Save className="w-4 h-4" />
+                  Save
                 </button>
-              )}
-            </div>
+                <button
+                  type="reset"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditingTopics(user.topics || []);
+                    setEditingBio(user.bio || "");
+                    setEditingName(user.name || "");
+                    setEditingImageStorageId(null);
+                    setResetImageTrigger((prev) => prev + 1);
+                  }}
+                  className="px-6 py-3 bg-black text-white font-semibold hover:bg-neutral-800 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="w-full px-6 py-3 bg-black text-white font-semibold hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
+              >
+                <Edit3 className="w-4 h-4" />
+                Edit Profile
+              </button>
+            )}
           </div>
         </div>
 
-        {}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white border border-gray-200">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -231,7 +216,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {}
             <div className="p-6 border-b border-gray-200">
               <h3 className="text-xl font-bold text-black mb-4">
                 Your Selected Topics
@@ -268,7 +252,6 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {}
             {isEditing && (
               <div className="p-6 border-b border-gray-200">
                 <h3 className="text-xl font-bold text-black mb-4">
@@ -293,7 +276,6 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {}
             <div className="p-6">
               <h3 className="text-xl font-bold text-black mb-4">
                 Reading Preferences
@@ -316,16 +298,12 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {}
           <UserNewsFeed userTopics={user.topics || []} />
 
-          {}
           <UserStats userTopics={user.topics || []} />
 
-          {}
           <UserAchievements />
 
-          {}
           <ReadingHistory />
         </div>
       </div>

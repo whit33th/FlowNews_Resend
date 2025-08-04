@@ -15,6 +15,7 @@ import type * as emailMutations from "../emailMutations.js";
 import type * as emails_AchievementUnlock from "../emails/AchievementUnlock.js";
 import type * as emails_NewArticleNotification from "../emails/NewArticleNotification.js";
 import type * as emails_PostCreatedEmail from "../emails/PostCreatedEmail.js";
+import type * as emails_SharedArticleEmail from "../emails/SharedArticleEmail.js";
 import type * as emails_ViewsMilestoneEmail from "../emails/ViewsMilestoneEmail.js";
 import type * as emails_WeeklyDigest from "../emails/WeeklyDigest.js";
 import type * as helpers_shared from "../helpers/shared.js";
@@ -24,6 +25,7 @@ import type * as news from "../news.js";
 import type * as profile from "../profile.js";
 import type * as sendEmails from "../sendEmails.js";
 import type * as subscribers from "../subscribers.js";
+import type * as types from "../types.js";
 import type * as users from "../users.js";
 
 import type {
@@ -48,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   "emails/AchievementUnlock": typeof emails_AchievementUnlock;
   "emails/NewArticleNotification": typeof emails_NewArticleNotification;
   "emails/PostCreatedEmail": typeof emails_PostCreatedEmail;
+  "emails/SharedArticleEmail": typeof emails_SharedArticleEmail;
   "emails/ViewsMilestoneEmail": typeof emails_ViewsMilestoneEmail;
   "emails/WeeklyDigest": typeof emails_WeeklyDigest;
   "helpers/shared": typeof helpers_shared;
@@ -57,6 +60,7 @@ declare const fullApi: ApiFromModules<{
   profile: typeof profile;
   sendEmails: typeof sendEmails;
   subscribers: typeof subscribers;
+  types: typeof types;
   users: typeof users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

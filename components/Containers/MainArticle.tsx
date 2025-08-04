@@ -1,14 +1,14 @@
 "use client";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex-helpers/react/cache";
-import { useStablePaginatedQuery } from "../../convex/helpers/useStablePaginatedQuery";
 import Link from "next/link";
 import { useState } from "react";
+import { useStablePaginatedQuery } from "../../convex/helpers/useStablePaginatedQuery";
 import { getContentForArticle } from "../../helpers/loremIpsum";
 import { ArticleImage } from "../UI/ArticleImage";
 import { AuthorInfo } from "../UI/AuthorInfo";
 import { NavigationButtons } from "../UI/NavigationButtons";
-import { MainArticleSkeleton } from "../UI/SkeletonComponents";
+import { MainArticleSkeleton } from "./Skeletons/SkeletonComponents";
 
 export const MainArticle = () => {
   const { results, loadMore, status, isLoading } = useStablePaginatedQuery(
@@ -47,10 +47,8 @@ export const MainArticle = () => {
 
   if (!currentArticle) {
     return (
-      <div className="flex-1 flex flex-col h-full p-3 lg:p-4 border-x border-gray-200">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-gray-500">No articles available</div>
-        </div>
+      <div className="flex-1 flex flex-col h-full p-3 lg:p-4 border-x items-center justify-center border-gray-200 min-w-0">
+        <p className="text-gray-500">No articles available</p>
       </div>
     );
   }
@@ -80,7 +78,7 @@ export const MainArticle = () => {
           max-h-[300px]
           lg:max-h-[200px]
           2xl:max-h-[500px]
-          flex-shrink-0
+          flex-shrink-0 
         `}
         isPremium={currentArticle.isPremium}
         isSubscribed={isSubscribed}

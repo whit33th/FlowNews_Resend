@@ -1,15 +1,12 @@
 import { internalMutation } from "./_generated/server";
 import { v } from "convex/values";
+import { emailTypeValidator } from "./schema";
 
 export const logEmailNotification = internalMutation({
   args: {
     userId: v.optional(v.id("users")),
     email: v.string(),
-    type: v.union(
-      v.literal("weekly_digest"),
-      v.literal("achievement_unlock"),
-      v.literal("new_article_favorite_topic")
-    ),
+    type: emailTypeValidator,
     emailId: v.string(),
     metadata: v.optional(v.any()),
   },

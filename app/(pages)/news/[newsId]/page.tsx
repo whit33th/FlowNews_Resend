@@ -12,6 +12,7 @@ import { useEffect, useRef } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 import StarRating from "@/components/UI/StarRating";
 import { useParams } from "next/navigation";
+import ShareButton from "@/components/UI/ShareButton";
 
 export default function NewsArticlePage() {
   const params = useParams();
@@ -136,6 +137,15 @@ export default function NewsArticlePage() {
             ))}
           </div>
         )}
+
+        <div className="mb-6">
+          <ShareButton
+            newsId={newsId}
+            newsTitle={article.title}
+            isPremium={article.isPremium}
+            canViewPremium={!!isSubscribed}
+          />
+        </div>
 
         {showPremiumBlur && (
           <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6">

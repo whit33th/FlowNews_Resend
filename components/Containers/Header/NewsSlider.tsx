@@ -5,11 +5,10 @@ import { api } from "../../../convex/_generated/api";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import Link from "next/link";
-import { memo } from "react";
 import "swiper/css";
-import { NewsSliderSkeleton } from "../../UI/SkeletonComponents";
+import { NewsSliderSkeleton } from "../Skeletons/SkeletonComponents";
 
-export const NewsSlider = memo(() => {
+export const NewsSlider = () => {
   const latestNews = usePaginatedQuery(
     api.news.getAllNewsPaginated,
     {
@@ -54,6 +53,6 @@ export const NewsSlider = memo(() => {
       </div>
     </div>
   );
-});
+};
 
 NewsSlider.displayName = "NewsSlider";

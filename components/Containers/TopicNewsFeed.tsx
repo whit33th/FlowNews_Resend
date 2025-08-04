@@ -2,18 +2,17 @@
 
 import { useQuery } from "convex-helpers/react/cache";
 import { BookOpen, Calendar, Eye } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { memo } from "react";
 import { api } from "../../convex/_generated/api";
 import { ArticleImage } from "../UI/ArticleImage";
-import { TopicNewsFeedSkeleton } from "../UI/SkeletonComponents";
+import { TopicNewsFeedSkeleton } from "./Skeletons/SkeletonComponents";
+import { SingleTopic } from "@/convex/schema";
 
 interface TopicNewsFeedProps {
-  topic: string;
+  topic: SingleTopic;
 }
 
-export const TopicNewsFeed = memo(({ topic }: TopicNewsFeedProps) => {
+export const TopicNewsFeed = ({ topic }: TopicNewsFeedProps) => {
   const topicNews = useQuery(api.news.getNewsByTopic, {
     topic: topic,
     limit: 20,
@@ -26,16 +25,12 @@ export const TopicNewsFeed = memo(({ topic }: TopicNewsFeedProps) => {
 
   if (topicNews.length === 0) {
     return (
-      <div className="bg-white border border-gray-200">
-        <div className="p-6">
-          <div className="text-center py-8 text-neutral-500">
-            <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-            <p className="mb-2">No news available for this topic yet.</p>
-            <p className="text-sm">
-              Check back later for new articles in this category.
-            </p>
-          </div>
-        </div>
+      <div className=" border p-6 border-gray-200 text-center py-8 text-neutral-500">
+        <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+        <p className="mb-2">No news available for this topic yet.</p>
+        <p className="text-sm">
+          Check back later for new articles in this category.
+        </p>
       </div>
     );
   }
@@ -104,6 +99,6 @@ export const TopicNewsFeed = memo(({ topic }: TopicNewsFeedProps) => {
       </div>
     </div>
   );
-});
+};
 
 TopicNewsFeed.displayName = "TopicNewsFeed";

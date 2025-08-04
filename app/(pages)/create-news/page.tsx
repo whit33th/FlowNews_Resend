@@ -1,27 +1,27 @@
 "use client";
 
+import { ImageUpload } from "@/components/UI/ImageUpload";
 import { api } from "@/convex/_generated/api";
-import { topics } from "@/convex/schema";
-import { useAuthActions } from "@convex-dev/auth/react";
+import { Id } from "@/convex/_generated/dataModel";
+import { SingleTopic, Topics, topics } from "@/convex/schema";
 import { useQuery } from "convex-helpers/react/cache";
 import { useMutation } from "convex/react";
 import {
   ArrowLeft,
   BookOpen,
+  Eye,
+  FileText,
   Image as ImageIcon,
   Save,
+  Star,
   Tag,
   Type,
   User,
-  FileText,
-  Eye,
-  Star,
 } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ImageUpload } from "@/components/UI/ImageUpload";
-import { Id } from "@/convex/_generated/dataModel";
 
 export default function CreateNewsPage() {
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function CreateNewsPage() {
     title: "",
     text: "",
     summary: "",
-    selectedTopics: [] as string[],
+    selectedTopics: [] as Topics[number][],
     mentions: [] as string[],
     isPremium: false,
     imageStorageId: null as string | null,
@@ -41,7 +41,7 @@ export default function CreateNewsPage() {
 
   const [mentionInput, setMentionInput] = useState("");
 
-  const handleTopicToggle = (topic: string) => {
+  const handleTopicToggle = (topic: SingleTopic) => {
     setFormData((prev) => ({
       ...prev,
       selectedTopics: prev.selectedTopics.includes(topic)
@@ -99,6 +99,11 @@ export default function CreateNewsPage() {
         mentions: formData.mentions.length > 0 ? formData.mentions : undefined,
         isPremium: formData.isPremium,
         image: formData.imageStorageId as Id<"_storage"> | undefined,
+        views: 0,
+        author: user._id,
+        authorImage: user.image as Id<"_storage"> | string | undefined,
+        averageRating: 0,
+        totalRatings: 0,
       });
 
       toast.success("News article created successfully!");
@@ -255,7 +260,9 @@ export default function CreateNewsPage() {
                 </h3>
                 <div className="flex items-center gap-3">
                   {user.image && (
-                    <img
+                    <Image
+                      width={200}
+                      height={200}
                       src={user.image}
                       alt={user.name || "Author"}
                       className="w-12 h-12 rounded-full object-cover"

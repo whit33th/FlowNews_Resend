@@ -181,14 +181,14 @@ export default function SignInPage() {
                 </div>
               </div>
 
-              <div className="text-right">
+              {/* <div className="text-right">
                 <Link
                   href="/forgot-password"
                   className="text-sm text-neutral-600 hover:text-black font-semibold"
                 >
                   Forgot your password?
                 </Link>
-              </div>
+              </div> */}
 
               <button
                 type="submit"

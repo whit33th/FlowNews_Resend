@@ -1,7 +1,12 @@
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { mutation, query, internalQuery } from "./_generated/server";
-import schema, { topics } from "./schema";
+import schema, {
+  topics,
+  topicsValidator,
+  singleTopicValidator,
+  newsFields,
+} from "./schema";
 import { Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { getUser } from "./helpers/shared";
@@ -17,7 +22,7 @@ export const getAllNewsPaginated = query({
         v.literal("viewsAsc")
       )
     ),
-    topics: v.optional(v.array(v.string())),
+    topics: v.optional(topicsValidator),
   },
   handler: async (ctx, args) => {
     let query;
@@ -74,18 +79,14 @@ export const getAllNewsPaginated = query({
 export const getNewsById = query({
   args: { id: v.id("news") },
   handler: async (ctx, args) => {
-    const news = await ctx.db.get(args.id as Id<"news">);
+    const news = await ctx.db.get(args.id);
     if (!news) return null;
 
     let imageUrl = null;
     let authorImageUrl = null;
 
     if (news.image) {
-      if (typeof news.image === "string" && news.image.startsWith("http")) {
-        imageUrl = news.image;
-      } else {
-        imageUrl = await ctx.storage.getUrl(news.image as Id<"_storage">);
-      }
+      imageUrl = await ctx.storage.getUrl(news.image as Id<"_storage">);
     }
 
     if (news.authorImage) {
@@ -112,7 +113,7 @@ export const getNewsById = query({
 export const getNewsByIdInternal = internalQuery({
   args: { id: v.id("news") },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.id as Id<"news">);
+    return await ctx.db.get(args.id);
   },
 });
 
@@ -130,7 +131,7 @@ export const getAllTopics = query({
 
 export const getPersonalizedNews = query({
   args: {
-    userTopics: v.optional(v.array(v.string())),
+    userTopics: v.optional(topicsValidator),
     limit: v.optional(v.number()),
     excludeId: v.optional(v.id("news")),
   },
@@ -332,7 +333,7 @@ export const getPremiumNews = query({
 
 export const getNewsByTopic = query({
   args: {
-    topic: v.string(),
+    topic: singleTopicValidator,
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
@@ -340,15 +341,13 @@ export const getNewsByTopic = query({
 
     const allNews = await ctx.db.query("news").order("desc").collect();
 
-    const normalizedTopic =
-      args.topic.charAt(0).toUpperCase() + args.topic.slice(1).toLowerCase();
-
     const topicNews = allNews
-      .filter((news) => news.topics.includes(normalizedTopic))
+      .filter((news) => news.topics.includes(args.topic))
       .slice(0, limit);
 
-    console.log(`Searching for topic: "${normalizedTopic}"`);
-    console.log(`Found ${topicNews.length} articles for this topic`);
+    console.log(
+      `Found ${topicNews.length} articles for topic: "${args.topic}"`
+    );
     console.log(`Total articles in DB: ${allNews.length}`);
 
     const resultsWithImage = await Promise.all(
@@ -391,7 +390,7 @@ export const getNewsByTopic = query({
 
 export const insertMultipleBlogPosts = mutation({
   args: {
-    blogPosts: v.array(schema.tables.news.validator),
+    blogPosts: v.array(v.object(newsFields)),
   },
   handler: async (ctx, args) => {
     const insertedIds = [];
@@ -431,15 +430,7 @@ export const incrementViews = mutation({
 });
 
 export const createNews = mutation({
-  args: {
-    title: v.string(),
-    text: v.string(),
-    summary: v.optional(v.string()),
-    topics: v.array(v.union(...topics.map((topic) => v.literal(topic)))),
-    mentions: v.optional(v.array(v.string())),
-    isPremium: v.boolean(),
-    image: v.optional(v.id("_storage")),
-  },
+  args: schema.tables.news.validator,
   handler: async (ctx, args) => {
     const user = await getUser(ctx);
     if (!user) {
@@ -447,18 +438,7 @@ export const createNews = mutation({
     }
 
     const newsId = await ctx.db.insert("news", {
-      title: args.title,
-      text: args.text,
-      summary: args.summary,
-      topics: args.topics,
-      mentions: args.mentions,
-      isPremium: args.isPremium,
-      image: args.image,
-      views: 0,
-      author: user._id,
-      authorImage: user.image as Id<"_storage"> | undefined,
-      averageRating: 0,
-      totalRatings: 0,
+      ...args,
     });
 
     await ctx.scheduler.runAfter(
@@ -479,5 +459,46 @@ export const getRecentNewsInternal = internalQuery({
   handler: async (ctx, args) => {
     const limit = args.limit || 10;
     return await ctx.db.query("news").order("desc").take(limit);
+  },
+});
+
+export const shareNewsViaEmail = mutation({
+  args: {
+    newsId: v.id("news"),
+    recipientEmail: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const news = await ctx.db.get(args.newsId);
+    if (!news) {
+      throw new Error("Article not found");
+    }
+
+    const user = await getUser(ctx);
+
+    await ctx.scheduler.runAfter(
+      0,
+      internal.sendEmails.sendSharedArticleEmail,
+      {
+        recipientEmail: args.recipientEmail,
+        sharedByUser: user?.name || "Someone",
+        sharedByEmail: user?.email,
+        newsItem: {
+          _id: news._id,
+          title: news.title,
+          text: news.text,
+          summary: news.summary,
+          topics: news.topics,
+          author: news.author,
+          views: news.views,
+          averageRating: news.averageRating,
+          totalRatings: news.totalRatings,
+          isPremium: news.isPremium,
+          image: news.image,
+          _creationTime: news._creationTime,
+        },
+      }
+    );
+
+    return { success: true };
   },
 });

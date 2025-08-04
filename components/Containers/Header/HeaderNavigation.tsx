@@ -1,5 +1,5 @@
 "use client";
-import { HeaderNavigationButtonsSkeleton } from "@/components/UI/SkeletonComponents";
+import { HeaderNavigationButtonsSkeleton } from "@/components/Containers/Skeletons/SkeletonComponents";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex-helpers/react/cache";
 import { NavigationMenu } from "../../UI/NavigationMenu";
@@ -13,8 +13,8 @@ export const HeaderNavigation = () => {
 
   const navigationItems = [
     ...(allTopics?.slice(0, 10) || []).map((topic) => ({
-      label: topic.toUpperCase(),
-      href: `/topic/${topic.toLowerCase()}`,
+      label: topic,
+      href: `/topic/${topic}`,
     })),
   ];
 

@@ -2,18 +2,32 @@
 
 import { useQuery } from "convex-helpers/react/cache";
 import { BookOpen, Calendar, Eye } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { memo } from "react";
 import { api } from "../../convex/_generated/api";
 import { ArticleImage } from "../UI/ArticleImage";
-import { UserNewsFeedSkeleton } from "../UI/SkeletonComponents";
+import { UserNewsFeedSkeleton } from "./Skeletons/SkeletonComponents";
 
 interface UserNewsFeedProps {
-  userTopics: string[];
+  userTopics: (
+    | "Tech"
+    | "Finance"
+    | "Healthcare"
+    | "Environment"
+    | "Politics"
+    | "Science"
+    | "Sports"
+    | "Entertainment"
+    | "Music"
+    | "Events"
+    | "Nature"
+    | "Business"
+    | "Education"
+    | "Travel"
+    | "Food"
+  )[];
 }
 
-export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
+export const UserNewsFeed = ({ userTopics }: UserNewsFeedProps) => {
   const personalizedNews = useQuery(api.news.getPersonalizedNews, {
     userTopics: userTopics.length > 0 ? userTopics : undefined,
   });
@@ -128,6 +142,6 @@ export const UserNewsFeed = memo(({ userTopics }: UserNewsFeedProps) => {
       </div>
     </div>
   );
-});
+};
 
 UserNewsFeed.displayName = "UserNewsFeed";

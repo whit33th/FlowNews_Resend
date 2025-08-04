@@ -3,7 +3,7 @@
 import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import { BookOpen, Calendar, TrendingUp } from "lucide-react";
-import { UserStatsSkeleton } from "./SkeletonComponents";
+import { UserStatsSkeleton } from "../Containers/Skeletons/SkeletonComponents";
 
 interface UserStatsProps {
   userTopics: string[];

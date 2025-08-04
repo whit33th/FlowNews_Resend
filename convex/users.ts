@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query, internalQuery } from "./_generated/server";
 import { getUser } from "./helpers/shared";
-import schema from "./schema";
+import { userFields, topicsValidator } from "./schema";
 
 export const getAllUsers = internalQuery({
   args: {},
@@ -20,7 +20,7 @@ export const getUserById = internalQuery({
 });
 
 export const patchUser = mutation({
-  args: schema.tables.users.validator,
+  args: userFields,
   handler: async (ctx, args) => {
     const user = await getUser(ctx);
     if (!user) return false;
@@ -38,7 +38,7 @@ export const isOnboarded = query({
 
 export const patchUserTopics = mutation({
   args: {
-    topics: v.array(v.string()),
+    topics: topicsValidator,
   },
   handler: async (ctx, { topics }) => {
     const user = await getUser(ctx);

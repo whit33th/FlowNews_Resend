@@ -6,7 +6,7 @@ export const ContactInfo = () => {
       <div className="space-y-1">
         <div className="flex items-center gap-2">
           <Mailbox className="w-4 lg:w-5 h-4 lg:h-5" />
-          <p className="font-semibold">mail@gmail.com</p>
+          <p className="font-semibold">convex@resend.dev</p>
         </div>
         <div className="flex items-center gap-2">
           <LucidePhoneCall className="w-4 lg:w-5 h-4 lg:h-5" />
@@ -15,4 +15,4 @@ export const ContactInfo = () => {
       </div>
     </div>
   );
-}; 
+};

@@ -8,15 +8,12 @@ importers:
 
   .:
     dependencies:
-      '@auth/core':
-        specifier: ^0.40.0
-        version: 0.40.0
       '@convex-dev/auth':
         specifier: ^0.0.80
         version: 0.0.80(@auth/core@0.40.0)(convex@1.25.4(react@19.1.0))(react@19.1.0)
       '@convex-dev/resend':
         specifier: ^0.1.7
-        version: 0.1.7(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14))(convex@1.25.4(react@19.1.0))(react@19.1.0)
+        version: 0.1.7(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(convex@1.25.4(react@19.1.0))(react@19.1.0)
       '@oslojs/crypto':
         specifier: ^1.0.1
         version: 1.0.1
@@ -37,10 +34,7 @@ importers:
         version: 1.25.4(react@19.1.0)
       convex-helpers:
         specifier: ^0.1.100
-        version: 0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14)
-      crypto:
-        specifier: ^1.0.1
-        version: 1.0.1
+        version: 0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
       crypto-js:
         specifier: ^4.2.0
         version: 4.2.0
@@ -77,9 +71,6 @@ importers:
       tailwind-merge:
         specifier: ^3.1.0
         version: 3.3.1
-      zod:
-        specifier: ^4.0.14
-        version: 4.0.14
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -1464,10 +1455,6 @@ packages:
 
   crypto-js@4.2.0:
     resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-
-  crypto@1.0.1:
-    resolution: {integrity: sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==}
-    deprecated: This package is no longer supported. It's now a built-in Node module. If you've depended on crypto, you should switch to the one that's built-in.
 
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
@@ -3062,9 +3049,6 @@ packages:
     resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
     engines: {node: '>=18'}
 
-  zod@4.0.14:
-    resolution: {integrity: sha512-nGFJTnJN6cM2v9kXL+SOBq3AtjQby3Mv5ySGFof5UGRHrRioSJ5iG680cYNjE/yWk671nROcpPj4hAS8nyLhSw==}
-
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -3146,22 +3130,22 @@ snapshots:
     optionalDependencies:
       react: 19.1.0
 
-  '@convex-dev/resend@0.1.7(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14))(convex@1.25.4(react@19.1.0))(react@19.1.0)':
+  '@convex-dev/resend@0.1.7(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(convex@1.25.4(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@convex-dev/rate-limiter': 0.2.12(convex@1.25.4(react@19.1.0))(react@19.1.0)
-      '@convex-dev/workpool': 0.2.17(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14))(convex@1.25.4(react@19.1.0))
+      '@convex-dev/workpool': 0.2.17(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(convex@1.25.4(react@19.1.0))
       convex: 1.25.4(react@19.1.0)
-      convex-helpers: 0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14)
+      convex-helpers: 0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
       remeda: 2.27.0
       svix: 1.69.0
     transitivePeerDependencies:
       - encoding
       - react
 
-  '@convex-dev/workpool@0.2.17(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14))(convex@1.25.4(react@19.1.0))':
+  '@convex-dev/workpool@0.2.17(convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(convex@1.25.4(react@19.1.0))':
     dependencies:
       convex: 1.25.4(react@19.1.0)
-      convex-helpers: 0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14)
+      convex-helpers: 0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
 
   '@emnapi/core@0.45.0':
     dependencies:
@@ -4208,13 +4192,12 @@ snapshots:
 
   consola@3.4.2: {}
 
-  convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@4.0.14):
+  convex-helpers@0.1.100(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.8.3):
     dependencies:
       convex: 1.25.4(react@19.1.0)
     optionalDependencies:
       react: 19.1.0
       typescript: 5.8.3
-      zod: 4.0.14
 
   convex@1.25.4(react@19.1.0):
     dependencies:
@@ -4240,8 +4223,6 @@ snapshots:
       which: 2.0.2
 
   crypto-js@4.2.0: {}
-
-  crypto@1.0.1: {}
 
   cssesc@3.0.0: {}
 
@@ -6152,5 +6133,3 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yoctocolors@2.1.1: {}
-
-  zod@4.0.14: {}

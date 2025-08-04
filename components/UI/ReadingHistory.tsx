@@ -4,7 +4,7 @@ import { useQuery } from "convex-helpers/react/cache";
 import { api } from "../../convex/_generated/api";
 import Link from "next/link";
 import { Clock, Eye, Calendar, BookOpen } from "lucide-react";
-import { ReadingHistorySkeleton } from "./SkeletonComponents";
+import { ReadingHistorySkeleton } from "../Containers/Skeletons/SkeletonComponents";
 
 export const ReadingHistory = () => {
   const readingHistory = useQuery(api.profile.getUserReadingHistory, {

@@ -2,10 +2,10 @@
 
 import { useMutation } from "convex/react";
 import { Camera, Upload } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { api } from "../../convex/_generated/api";
-import Image from "next/image";
 
 interface ImageUploadProps {
   currentImage?: string;

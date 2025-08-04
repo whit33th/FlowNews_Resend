@@ -10,6 +10,7 @@ import { NewArticleNotificationEmail } from "./emails/NewArticleNotification";
 import { WeeklyDigestEmail } from "./emails/WeeklyDigest";
 import { PostCreatedEmail } from "./emails/PostCreatedEmail";
 import { ViewsMilestoneEmail } from "./emails/ViewsMilestoneEmail";
+import { SharedArticleEmail } from "./emails/SharedArticleEmail";
 
 export const resend: Resend = new Resend(components.resend, {
   testMode: false,
@@ -194,6 +195,34 @@ export const sendViewsMilestoneEmail = internalAction({
       from: "Newsletter <newsletter@resend.dev>",
       to: args.authorEmail,
       subject: `🎉 Milestone reached: ${args.views} views on "${args.newsTitle}"!`,
+      html,
+    });
+
+    return result;
+  },
+});
+
+export const sendSharedArticleEmail = internalAction({
+  args: {
+    recipientEmail: v.string(),
+    sharedByUser: v.string(),
+    sharedByEmail: v.optional(v.string()),
+    newsItem: v.any(),
+  },
+  handler: async (ctx, args) => {
+    const html = await render(
+      SharedArticleEmail({
+        recipientEmail: args.recipientEmail,
+        sharedByUser: args.sharedByUser,
+        sharedByEmail: args.sharedByEmail,
+        newsItem: args.newsItem,
+      })
+    );
+
+    const result = await resend.sendEmail(ctx, {
+      from: "Newsletter <newsletter@resend.dev>",
+      to: args.recipientEmail,
+      subject: `📰 ${args.sharedByUser} shared an article with you: ${args.newsItem.title}`,
       html,
     });
 

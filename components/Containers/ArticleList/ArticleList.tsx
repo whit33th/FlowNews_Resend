@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex-helpers/react/cache";
-import { ArticleListSkeleton } from "../../UI/SkeletonComponents";
+import { ArticleListSkeleton } from "../Skeletons/SkeletonComponents";
 
 export const ArticleList = () => {
   const premiumNews = useQuery(api.news.getPremiumNews, { limit: 15 });

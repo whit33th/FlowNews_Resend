@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useConvexAuth } from "convex/react";
-import { ProfileSkeleton } from "@/components/UI/SkeletonComponents";
+import { ProfileSkeleton } from "@/components/Containers/Skeletons/SkeletonComponents";
 
 export default function ProfileLayout({
   children,

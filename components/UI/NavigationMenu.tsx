@@ -16,7 +16,7 @@ export const NavigationMenu = ({ navigationItems }: NavigationMenuProps) => {
         <Link
           key={item.label + idx}
           href={item.href}
-          className="text-sm lg:text-base font-semibold text-neutral-500 hover:text-neutral-700 transition-colors"
+          className="text-sm lg:text-base font-semibold text-neutral-500 uppercase hover:text-neutral-700 transition-colors"
         >
           {item.label}
         </Link>

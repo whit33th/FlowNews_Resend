@@ -1,10 +1,10 @@
 import { ConvexError } from "convex/values";
 import { mutation, query, internalQuery } from "./_generated/server";
 import { getUser } from "./helpers/shared";
-import schema from "./schema";
+import { subscriberFields } from "./schema";
 
 export const createSubscriber = mutation({
-  args: schema.tables.subscribers.validator,
+  args: subscriberFields,
   handler: async (ctx, args) => {
     const user = await getUser(ctx);
 
