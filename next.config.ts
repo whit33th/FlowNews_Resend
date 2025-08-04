@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "limitless-ant-955.convex.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "outstanding-dinosaur-477.convex.cloud",
+      },
     ],
   },
 };
