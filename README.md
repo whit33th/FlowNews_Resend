@@ -2,6 +2,9 @@
 
 FlowNews is a modern news aggregation platform built with cutting-edge technologies to provide a seamless user experience.
 
+<img width="3816" height="2031" alt="image" src="https://github.com/user-attachments/assets/935b51c8-6017-4a02-84fa-6861fdb53710" />
+
+
 ## Key Technologies
 
 ### Convex
